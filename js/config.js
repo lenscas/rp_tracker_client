@@ -3,3 +3,5 @@ conf.api      = "http://localhost/tracker/index.php/api/"; "http://localhost/rpI
 conf.prot     = "http://"
 conf.base_url = conf.prot+"localhost/tracker_client/" 
 conf.pages    = conf.base_url +"pages/"
+conf.debug    = true
+$.ajaxSetup({ cache: !conf.debug });
