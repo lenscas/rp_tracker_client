@@ -1,0 +1,21 @@
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+<script src="js/config.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/functions.js"></script>
+<!--
+<script src="js/start.js"></script>
+-->
+<div id="pageHolder">
+</div>
+<script>
+	enablePage(routes["index"])
+	$("body").on("click","a.newPage",function(event){
+		event.preventDefault()
+		let newUrl = $(this).attr("href")
+		enablePage(routes[newUrl])
+	})
+</script>
