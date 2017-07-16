@@ -1,11 +1,23 @@
+<head>
 <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous">
 </script>
-<script src="js/config.js"></script>
-<script src="js/routes.js"></script>
-<script src="js/pageHandler.js"></script>
+<script src="/tracker_client/js/config.js"></script>
+</head>
+<body>
+<script>
+	(function(){
+		let el = $("head");
+		function loadJS(url){
+			el.append('<script src=\"'+conf.js+url+'.js\">\<\/script>');
+			return loadJS
+		}
+		loadJS("routes")("pageHandler")("api")("alertManager")
+	})()
+	
+</script>
 <div id="pageHolder">
 </div>
 <script>
@@ -15,4 +27,6 @@
 		let newUrl = $(this).attr("href")
 		pageHandler.enablePage(routes[newUrl])
 	})
+	pageHandler.goTo("test")
 </script>
+</body>

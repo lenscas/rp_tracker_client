@@ -1,9 +1,21 @@
-console.log("it loaded")
 pageHandler.registerPageCode({
 	bindEvents : function(){
-		console.log("it should be binded");
 		$("#awesome").on("click",function(){
-			alert("it worked!");
+			api.post({
+				url  : "login",
+				data : {username : "root", password : "root"},
+				callBack : function(xhr,status){
+					if(status=="success" && xhr.responceJSON.error){
+						pageHandler.enablePage("index");
+					}
+				}
+			});
 		});
+		$("#logout").on("click",function(){
+			api.post({ url :"logout"})
+		});
+	},
+	startUp : function(){
+		console.log("I AM STARTED!");
 	}
 });
