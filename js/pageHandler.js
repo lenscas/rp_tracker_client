@@ -19,7 +19,11 @@ pageHandler = {
 					}
 				)
 			);
-		while(!foundRoute && Object.keys(possibleRoutes).length >0 && at<= url.length){
+		while(
+			!foundRoute && 
+			Object.keys(possibleRoutes).length >0 && 
+			at<= url.length
+		){
 			console.log(routes);
 			let newPossibleRoutes=[];
 			Object.keys(possibleRoutes).some((value,key) => {
@@ -88,17 +92,23 @@ pageHandler = {
 		this.initCode(this.activePage);
 	},
 	loadCode : function(pathPart){
-		$("head").append('<script src="'+ conf.base_url+'js/pageCode/'+pathPart+'.js"></script>');
+		$("head")
+			.append('<script src=""></script>')
+			.attr("src",conf.base_url+'js/pageCode/'+pathPart+'.js');
 	},
 	initCode : function(id){
 		this.bindEvents(id);
 		this.startUp(id);
 	},
 	bindEvents : function(id) {
-		this.pageCode[id] && this.pageCode[id].bindEvents && this.pageCode[id].bindEvents();
+		this.pageCode[id] && 
+		this.pageCode[id].bindEvents && 
+		this.pageCode[id].bindEvents();
 	},
 	startUp : function(id){
 		console.log("awesome" && "less awesome");
-		this.pageCode[id] && this.pageCode[id].startUp && this.pageCode[id].startUp();
+		this.pageCode[id] && t
+		his.pageCode[id].startUp && 
+		this.pageCode[id].startUp();
 	}
 }

@@ -6,7 +6,10 @@ api = {
 				if(status==="error"){
 					if(jqXHR.responseJSON){
 						console.log(jqXHR.responseJSON.errors);
-						$.each(jqXHR.responseJSON.errors,(element)=>{alertManager.show(element)});
+						$.each(
+							jqXHR.responseJSON.errors,
+							element => {alertManager.show(element)}
+						);
 					} else {
 						alertManager.show("Something went wrong. :(");
 					}
