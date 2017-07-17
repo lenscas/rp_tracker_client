@@ -1,32 +1,153 @@
-<head>
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous">
-</script>
-<script src="/tracker_client/js/config.js"></script>
-</head>
-<body>
-<script>
-	(function(){
-		let el = $("head");
-		function loadJS(url){
-			el.append('<script src=\"'+conf.js+url+'.js\">\<\/script>');
-			return loadJS
-		}
-		loadJS("routes")("pageHandler")("api")("alertManager")
-	})()
-	
-</script>
-<div id="pageHolder">
-</div>
-<script>
-	pageHandler.enablePage(routes["index"])
-	$("body").on("click","a.newPage",function(event){
-		event.preventDefault()
-		let newUrl = $(this).attr("href")
-		pageHandler.enablePage(routes[newUrl])
-	})
-	pageHandler.goTo("test")
-</script>
-</body>
+<!--this file contains the starting logic of the application. 
+From here everything gets loaded and if needed executed.
+It also contains the container for each page
+-->
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- jquery -->
+		<script
+		  src="https://code.jquery.com/jquery-3.2.1.min.js"
+		  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+		  crossorigin="anonymous">
+		</script>
+		<!--stylesheet bootstrap -->
+		<link
+			rel="stylesheet" 
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+			crossorigin="anonymous">
+		<!--script bootstrap -->
+		<script 
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+			crossorigin="anonymous">
+		</script>
+		<!-- load the config for the client -->
+		<script src="/tracker_client/js/config.js"></script>
+		<link rel="stylesheet" href="/tracker_client/css/simpleSidebar.css">
+		<script>
+			//adds the other scripts that are needed.
+			(function(){
+				let el = $("head");
+				function loadJS(url){
+					$("<script><\/script>")
+						.attr("src",conf.js+url+'.js')
+						.appendTo(el);
+					return loadJS
+				}
+				function loadCss(url){
+					$('<link rel="stylesheet">')
+						.attr("href",conf.css+url+".css")
+						.appendTo(el);
+					return loadCss
+				}
+				loadJS("routes")("pageHandler")("api")("alertManager");
+				loadCss("simpleSidebar")("index");
+			})()
+		</script>
+	</head>
+	<body>
+		<nav id="navHeader" class="navbar navbar-default">
+			<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button 
+						type="button" 
+						class="navbar-toggle collapsed" 
+						data-toggle="collapse" 
+						data-target="#headerNavBar" 
+						aria-expanded="false"
+					>
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand">Brand</a>
+					<ul class="nav navbar-nav" style="">
+						<li>
+							<a href="#">Profile</a>
+						</li>
+					</ul>
+					<!--
+					<button type="button" class="btn btn-default collapsed" id="menu-toggle">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				-->
+				</div>
+			</div>
+		</nav>
+		<div id="wrapper" class="toggled">
+			<div id="sidebar-wrapper">
+				<ul class="sidebar-nav">
+					<li>
+						<a href="#">Overview</a>
+					</li>
+					<li>
+						<a href="#">Characters</a>
+					</li>
+					<li>
+						<a href="#">Battles</a>
+					</li>
+					<li>
+						<a href="#">Events?</a>
+					</li>
+					<li>
+						<a href="#">No idea what more to put</a>
+					</li>
+					<li>
+						<a href="#">About</a>
+					</li>
+					<li>
+						<a href="#">Services</a>
+					</li>
+					<li>
+						<a href="#">Contact</a>
+					</li>
+				</ul>
+			</div>
+			<div id="page-content-wrapper">
+				<div class="col-md-12">
+					<div class="row">
+						<div id="alert-holder">
+							<div class="alert alert-danger">
+								Some show case error
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div id="pageHolder">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			(function(){
+				//if the user clicks on a link with the class newPage
+				//instead of having the user follow said link we want to load the page in ourself
+				$("body").on("click","a.newPage",function(event){
+					event.preventDefault()
+					let newUrl = $(this).attr("href")
+					pageHandler.goTo(newUrl)
+				})
+				//after the app is loaded for the first time we want to know what page to load
+				//if the url does not point to a route, we assume the user goes to "index"
+				const url = window.location.href.replace(conf.base_url,"") || "index";
+				pageHandler.goTo(url)
+			})()
+		</script>
+		<script>
+			$("#menu-toggle").click(event => {
+				event.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+		</script>
+	</body>
+</html>
