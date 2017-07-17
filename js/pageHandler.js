@@ -2,15 +2,17 @@ pageHandler = {
 	pageHolder : "#pageHolder",
 	pageCode   : {},
 	activePage : "",
-	goTo       : function(url){
-		console.log("url " +url);
+	goTo       : function(url,addUrl=true){
 		let foundRoute     = false;
 		let possibleRoutes = [];
 		let at = 0;
+		
+		addUrl && history.pushState({url : url},"",url);
 		url = url.split("/");
 		Object.keys(routes)
 			.forEach(
-				value => possibleRoutes.push(
+				value => value.split("/").length === url.length && 
+				possibleRoutes.push(
 					{
 						url         : value.split("/"),
 						id          : routes[value][1],
@@ -21,41 +23,33 @@ pageHandler = {
 			);
 		while(
 			!foundRoute && 
-			Object.keys(possibleRoutes).length >0 && 
+			possibleRoutes.length >0 && 
 			at<= url.length
 		){
-			console.log(routes);
 			let newPossibleRoutes=[];
-			Object.keys(possibleRoutes).some((value,key) => {
+			possibleRoutes.some((value,key) => {
 				let found = false
-				console.log("each");
-				console.log(value);
 				if(value.url[at] =="(:any)"){
-					console.log("test");
 					possibleRoutes[key].foundParams.push(url[at]);
 					found= true
-				} else if (value.url["at"]==url[at]){
+				} else if (value.url[at]==url[at]){
 					found=true
 				}
 				if(found){
 					newPossibleRoutes.push(possibleRoutes[key]);
-					console.log(at + " " +url.length);
-					if(at===url.length){
-						console.log("test");
-						found=possibleRoutes[key];
-						return false;
+					if(at===url.length -1){
+						
+						foundRoute=possibleRoutes[key];
+						return true;
 					}
 				}
 			})
 			possibleRoutes=newPossibleRoutes;
 			at = at+1
-			console.log("at "+at);
 		}
-		console.log("out of while");
 		if(foundRoute){
-			console.log(found);
-			console.log(routes[found.url.join("/")]);
-			//this.enablePage(route[found]);
+			
+			this.enablePage(routes[foundRoute.url.join("/")]);
 		}
 	},
 	enablePage : function (route){
@@ -63,7 +57,6 @@ pageHandler = {
 		this.hideAllPages();
 		activePage = route[1]
 		if(el.length===0){
-			console.log(conf.pages+route[0]+".html")
 			$('<div id="'+ route[1] +'"></div>').appendTo(this.pageHolder).load(
 				conf.pages+route[0]+".html",
 				function(responce,status,xhr){
@@ -106,9 +99,9 @@ pageHandler = {
 		this.pageCode[id].bindEvents();
 	},
 	startUp : function(id){
-		console.log("awesome" && "less awesome");
-		this.pageCode[id] && t
-		his.pageCode[id].startUp && 
+		this.pageCode[id] &&
+		this.pageCode[id].startUp && 
 		this.pageCode[id].startUp();
 	}
 }
+window.onpopstate = event => pageHandler.goTo(event.state.url);
