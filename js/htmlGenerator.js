@@ -46,5 +46,50 @@ htmlGen = {
 						)
 				)
 		);
+	},
+	createTable : function(selector,data){
+		const el      = $(selector);
+		console.log(el);
+		const head    = $("<thead></thead>");
+		const headRow = $("<tr></tr>").appendTo(head);
+		const body    = $("<tbody></tbody>");
+		const table   = $("<table></table>")
+			.addClass(data.head.cssClass || "")
+			.append(head)
+			.append(body)
+		el.append(table);
+		data.head.row.forEach( value =>{
+			console.log(value);
+			let cssClass= "";
+			let name    = value;
+			if(typeof(value) === "object"){
+				cssClass = value.cssClass || "";
+				name     = vale.name || "";
+			}
+			headRow.append(
+				$("<th></th>")
+					.addClass(cssClass)
+					.append(name)
+			);
+			console.log(headRow);
+		});
+		console.log(table);
+		data.rows.forEach(row => {
+			const curRow = $("<tr></tr>").appendTo(body);
+			row.forEach(cell => {
+				let content  = cell;
+				let cssClass = ""
+				if(typeof(cell) == "object"){
+					content  = cell.content  || "";
+					cssClass = cell.cssClass || "";
+				}
+				$("<td></td>")
+					//will probably get expanded
+					.append(content)
+					.addClass(cssClass)
+					.appendTo(curRow);
+			});
+		});
+		return table
 	}
 }

@@ -1,8 +1,9 @@
 pageHandler = {
-	pageHolder : "#pageHolder",
-	pageCode   : {},
-	activePage : "",
-	goTo       : function(url,addUrl=true){
+	pageHolder    : "#pageHolder",
+	pageCode      : {},
+	activePage    : "",
+	curPageParams : [],
+	goTo          : function(url,addUrl=true){
 		let foundRoute     = false;
 		let possibleRoutes = [];
 		let at = 0;
@@ -48,13 +49,15 @@ pageHandler = {
 			at = at+1
 		}
 		if(foundRoute){
-			
-			this.enablePage(routes[foundRoute.url.join("/")]);
+			foundRoute.url = foundRoute.url.join("/");
+			this.enablePage(foundRoute);
 		}
 	},
-	enablePage : function (route){
+	enablePage : function (urlData){
 		alertManager.removeAllAlerts();
+		const route = routes[urlData.url]
 		const el = $("#"+route[1]);
+		this.curPageParams = urlData.foundParams;
 		this.hideAllPages();
 		activePage = route[1]
 		if(el.length===0){
@@ -89,18 +92,18 @@ pageHandler = {
 		$.getScript(conf.js+"pageCode/"+pathPart+".js",callback);
 	},
 	initCode : function(id){
-		this.startUp(id);
-		this.bindEvents(id);
+		this.startUp(id,this.curPageParams);
+		this.bindEvents(id,this.curPageParams);
 	},
-	bindEvents : function(id) {
+	bindEvents : function(id,params) {
 		this.pageCode[id] && 
 		this.pageCode[id].bindEvents && 
-		this.pageCode[id].bindEvents();
+		this.pageCode[id].bindEvents(params);
 	},
-	startUp : function(id){
+	startUp : function(id,params){
 		this.pageCode[id] &&
 		this.pageCode[id].startUp && 
-		this.pageCode[id].startUp();
+		this.pageCode[id].startUp(params);
 	}
 }
 window.onpopstate = event => pageHandler.goTo(event.state.url);
