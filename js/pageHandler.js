@@ -53,6 +53,7 @@ pageHandler = {
 		}
 	},
 	enablePage : function (route){
+		alertManager.removeAllAlerts();
 		const el = $("#"+route[1]);
 		this.hideAllPages();
 		activePage = route[1]
@@ -84,14 +85,12 @@ pageHandler = {
 		this.pageCode[this.activePage] = newCode;
 		this.initCode(this.activePage);
 	},
-	loadCode : function(pathPart){
-		$("head")
-			.append('<script src=""></script>')
-			.attr("src",conf.base_url+'js/pageCode/'+pathPart+'.js');
+	loadCode : function(pathPart,callback){
+		$.getScript(conf.js+"pageCode/"+pathPart+".js",callback);
 	},
 	initCode : function(id){
-		this.bindEvents(id);
 		this.startUp(id);
+		this.bindEvents(id);
 	},
 	bindEvents : function(id) {
 		this.pageCode[id] && 

@@ -1,12 +1,14 @@
 pageHandler.registerPageCode({
 	bindEvents : function(){
-		$("#awesome").on("click",function(){
+		$("#loginForm").on("submit",function(event){
+			event.preventDefault();
 			api.post({
 				url  : "login",
-				data : {username : "root", password : "root"},
+				data : $(this).serialize(),
 				callBack : function(xhr,status){
-					if(status=="success" && xhr.responceJSON.error){
-						pageHandler.enablePage("index");
+					let json = xhr.responseJSON
+					if(status=="success" && !json.error){
+						pageHandler.goTo("profile/"+json.userId);
 					}
 				}
 			});
@@ -16,6 +18,27 @@ pageHandler.registerPageCode({
 		});
 	},
 	startUp : function(){
-		console.log("I AM STARTED!");
+		htmlGen.createForm("#loginForm",{
+			inputs : [
+				{
+					label : "Username",
+					input : {
+						type : "text",
+						name : "username"
+					}
+				},
+				{
+					label : "Password",
+					input : {
+						type : "password",
+						name : "password"
+					}
+				}
+			],
+			button : {
+				color : "primary",
+				text  : "login"
+			}
+		})
 	}
 });
