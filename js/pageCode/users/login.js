@@ -8,7 +8,11 @@ pageHandler.registerPageCode({
 				callBack : function(xhr,status){
 					let json = xhr.responseJSON
 					if(status=="success" && !json.error){
-						pageHandler.goTo("profile/"+json.userId);
+						pageHandler.goTo(conf.base_url+"profile/"+json.userId);
+					}
+					if(xhr.state() === "rejected"){
+						//add code to deal with already being logged in here!
+						pageHandler.goTo("users/")
 					}
 				}
 			});
