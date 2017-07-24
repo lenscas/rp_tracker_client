@@ -1,0 +1,9 @@
+.compressedTableHighed {
+	height     : 90px;
+	max-height : 90px;
+	overflow   : hidden;
+}
+.imageCompressed {
+	height     : 50px;
+	max-height : 50px;
+}

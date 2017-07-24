@@ -24,6 +24,24 @@ It also contains the container for each page
 			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
 			crossorigin="anonymous">
 		</script>
+		<!-- css datatables -->
+		<link 
+			rel="stylesheet"
+			href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"
+		>
+		<!-- script datatables -->
+		<script 
+			src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"
+		>
+		<!--script col-reorder -->
+		<script 
+			src="https://cdn.datatables.net/colreorder/1.3.3/js/dataTables.colReorder.min.js"
+		></script>
+		<!--css col-reorder -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.datatables.net/colreorder/1.3.3/css/colReorder.dataTables.min.css"
+		>
 		<!-- load the config for the client -->
 		<script src="/tracker_client/js/config.js"></script>
 		<link rel="stylesheet" href="/tracker_client/css/simpleSidebar.css">
@@ -31,20 +49,15 @@ It also contains the container for each page
 			//adds the other scripts that are needed.
 			(function(){
 				let el = $("head");
-				function loadJS(url){
-					$("<script><\/script>")
-						.attr("src",conf.js+url+'.js')
-						.appendTo(el);
-					return loadJS
-				}
+				
 				function loadCss(url){
 					$('<link rel="stylesheet">')
 						.attr("href",conf.css+url+".css")
 						.appendTo(el);
 					return loadCss
 				}
-				loadJS("routes")("pageHandler")("api")("alertManager");
-				loadCss("simpleSidebar")("index");
+				
+				loadCss("simpleSidebar")("index")("global");
 			})()
 		</script>
 	</head>
@@ -130,6 +143,21 @@ It also contains the container for each page
 		</div>
 		<script>
 			(function(){
+				function loadJS(url,callBack){
+					$.getScript(conf.js+url+".js",callBack)
+				}
+				loadJS("routes",
+					() => loadJS("pageHandler",
+						 () => loadJS("alertManager",
+							() => loadJS("api",
+								() => loadJS("htmlGenerator", () =>{
+									//after the app is loaded for the first time we want to know what page to load
+									pageHandler.goTo(window.location.href,false)
+								})
+							)
+						)
+					)
+				)
 				//if the user clicks on a link with the class newPage
 				//instead of having the user follow said link we want to load the page in ourself
 				$("body").on("click","a.newPage",function(event){
@@ -137,10 +165,6 @@ It also contains the container for each page
 					let newUrl = $(this).attr("href")
 					pageHandler.goTo(newUrl)
 				})
-				//after the app is loaded for the first time we want to know what page to load
-				//if the url does not point to a route, we assume the user goes to "index"
-				const url = window.location.href.replace(conf.base_url,"") || "index";
-				pageHandler.goTo(url)
 			})()
 		</script>
 		<script>

@@ -1,3 +1,4 @@
+console.log("test2")
 pageHandler.registerPageCode({
 	bindEvents : function(){
 		$("#loginForm").on("submit",function(event){
@@ -22,6 +23,8 @@ pageHandler.registerPageCode({
 		});
 	},
 	startUp : function(){
+		console.log("wtf?!");
+		console.log($("#loginForm"));
 		htmlGen.createForm("#loginForm",{
 			inputs : [
 				{

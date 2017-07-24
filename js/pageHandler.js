@@ -7,9 +7,10 @@ pageHandler = {
 		let foundRoute     = false;
 		let possibleRoutes = [];
 		let at = 0;
-		
+		console.log(url);
 		addUrl && history.pushState({url : url},"",url);
-		url = url.split("/");
+		url = url.replace(conf.base_url,"").split("/");
+		console.log(url);
 		Object.keys(routes)
 			.forEach(
 				value => value.split("/").length === url.length && 
@@ -30,7 +31,7 @@ pageHandler = {
 			let newPossibleRoutes=[];
 			possibleRoutes.some((value,key) => {
 				let found = false
-				if(value.url[at] =="(:any)"){
+				if(value.url[at] =="(:any)" && url[at]){
 					possibleRoutes[key].foundParams.push(url[at]);
 					found= true
 				} else if (value.url[at]==url[at]){
@@ -39,7 +40,6 @@ pageHandler = {
 				if(found){
 					newPossibleRoutes.push(possibleRoutes[key]);
 					if(at===url.length -1){
-						
 						foundRoute=possibleRoutes[key];
 						return true;
 					}
@@ -61,17 +61,19 @@ pageHandler = {
 		this.hideAllPages();
 		activePage = route[1]
 		if(el.length===0){
-			$('<div id="'+ route[1] +'"></div>').appendTo(this.pageHolder).load(
-				conf.pages+route[0]+".html",
-				function(responce,status,xhr){
-					if(status==="error"){
-						alert("there was an error!");
-						console.log(responce);
-						console.log(status);
-						console.log(xhr);
+			$('<div id="'+ route[1] +'"></div>')
+				.appendTo(this.pageHolder)
+				.load(
+					conf.pages+route[0]+".html",
+					function(responce,status,xhr){
+						if(status==="error"){
+							alert("there was an error!");
+							console.log(responce);
+							console.log(status);
+							console.log(xhr);
+						}
 					}
-				}
-			)
+				)
 		} else {
 			this.renderPage(route[1])
 		}
@@ -106,4 +108,4 @@ pageHandler = {
 		this.pageCode[id].startUp(params);
 	}
 }
-window.onpopstate = event => pageHandler.goTo(event.state.url);
+window.onpopstate = event => console.log(event)//pageHandler.goTo(event.state.url);

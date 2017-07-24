@@ -49,7 +49,6 @@ htmlGen = {
 	},
 	createTable : function(selector,data){
 		const el      = $(selector);
-		console.log(el);
 		const head    = $("<thead></thead>");
 		const headRow = $("<tr></tr>").appendTo(head);
 		const body    = $("<tbody></tbody>");
@@ -59,7 +58,6 @@ htmlGen = {
 			.append(body)
 		el.append(table);
 		data.head.row.forEach( value =>{
-			console.log(value);
 			let cssClass= "";
 			let name    = value;
 			if(typeof(value) === "object"){
@@ -71,16 +69,20 @@ htmlGen = {
 					.addClass(cssClass)
 					.append(name)
 			);
-			console.log(headRow);
 		});
-		console.log(table);
 		data.rows.forEach(row => {
 			const curRow = $("<tr></tr>").appendTo(body);
-			row.forEach(cell => {
+			let rows = row;
+			if(!Array.isArray(row)){
+				rows = row.row;
+				curRow.addClass(row.cssClass);
+			}
+			
+			rows.forEach(cell => {
 				let content  = cell;
 				let cssClass = ""
-				if(typeof(cell) == "object"){
-					content  = cell.content  || "";
+				if((typeof(cell) == "object") && cell.content){
+					content  = cell.content
 					cssClass = cell.cssClass || "";
 				}
 				$("<td></td>")
@@ -91,5 +93,18 @@ htmlGen = {
 			});
 		});
 		return table
+	},
+	createLink :function(selector,data){
+		let href     = conf.base_url + data.href || "";
+		let text     = data.text || "";
+		let cssClass = data.cssClass || "";
+		let a        = $('<a class="newPage"></a>')
+			.append(text)
+			.attr("href",href)
+			.addClass(cssClass);
+		if(selector){
+			a.appendTo($(selector));
+		}
+		return a;
 	}
 }

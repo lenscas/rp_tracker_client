@@ -8,7 +8,6 @@ pageHandler.registerPageCode({
 			rows : []
 		}
 		data.forEach((value,key)=> {
-			let a = $('<a class="newPage"></a>');
 			tableData.rows[key] = [
 				htmlGen.createLink(
 					false,
