@@ -97,30 +97,33 @@ It also contains the container for each page
 		</nav>
 		<div id="wrapper" class="toggled">
 			<div id="sidebar-wrapper">
-				<ul class="sidebar-nav">
+				<ul class="sidebar-nav" id="sidebarNav">
 					<li>
-						<a href="#">Overview</a>
+						<a class="newPage" href="rp">Overview</a>
 					</li>
 					<li>
-						<a href="#">Characters</a>
+						<h2 id="menuRPName">Test</h2>
 					</li>
 					<li>
-						<a href="#">Battles</a>
+						<a class="menuItem" href="characters">Characters</a>
 					</li>
 					<li>
-						<a href="#">Events?</a>
+						<a class="menuItem" href="battles">Battles</a>
 					</li>
 					<li>
-						<a href="#">No idea what more to put</a>
+						<a class="menuItem" href="#">Events?</a>
 					</li>
 					<li>
-						<a href="#">About</a>
+						<a class="menuItem" href="#">No idea what more to put</a>
 					</li>
 					<li>
-						<a href="#">Services</a>
+						<a class="menuItem" href="#">About</a>
 					</li>
 					<li>
-						<a href="#">Contact</a>
+						<a class="menuItem" href="#">Services</a>
+					</li>
+					<li>
+						<a class="menuItem" href="#">Contact</a>
 					</li>
 				</ul>
 			</div>
@@ -143,21 +146,25 @@ It also contains the container for each page
 		</div>
 		<script>
 			(function(){
-				function loadJS(url,callBack){
-					$.getScript(conf.js+url+".js",callBack)
+				let toLoad =[
+					"routes",
+					"pageHandler",
+					"alertManager",
+					"api",
+					"htmlGenerator",
+					"menuManager"
+				];
+				function checkDone(){
+					loaded++;
+					console.log(loaded)
+					if(loaded===toLoad.length){
+						//after the app is loaded for the first time we want to know what page to load
+						pageHandler.goTo(window.location.href,false)
+					}
 				}
-				loadJS("routes",
-					() => loadJS("pageHandler",
-						 () => loadJS("alertManager",
-							() => loadJS("api",
-								() => loadJS("htmlGenerator", () =>{
-									//after the app is loaded for the first time we want to know what page to load
-									pageHandler.goTo(window.location.href,false)
-								})
-							)
-						)
-					)
-				)
+				toLoad.forEach(value=>{
+					$.getScript(conf.js+value+".js",()=>checkDone())
+				})
 				//if the user clicks on a link with the class newPage
 				//instead of having the user follow said link we want to load the page in ourself
 				$("body").on("click","a.newPage",function(event){
