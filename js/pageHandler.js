@@ -19,7 +19,7 @@ pageHandler = {
 						url         : value.split("/"),
 						id          : routes[value][1],
 						page        : routes[value][0],
-						foundParams : [] 
+						foundParams : []
 					}
 				)
 			);
