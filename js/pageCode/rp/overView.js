@@ -4,7 +4,6 @@ pageHandler.registerPageCode({
 		api.get({
 			url      : "rp/"+pageParams[0],
 			callBack : function (xhr,status){
-				console.log(xhr);
 				if(status!=="success"){
 					return;
 				}
@@ -13,7 +12,6 @@ pageHandler.registerPageCode({
 				
 				let   table    = $(idPrefix+"Config")
 				let   charCon  = $(idPrefix+"Characters");
-				console.log(table);
 				$(idPrefix+"Desc").append(data.description.replace("\n","<br>"));
 				
 				table.append(
@@ -57,11 +55,6 @@ pageHandler.registerPageCode({
 						}
 					);
 				});
-						
-				
-				//test
-				//console.log("still in callback");
-				console.log(xhr);
 			}
 		})
 	}

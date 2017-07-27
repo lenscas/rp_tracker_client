@@ -8,7 +8,6 @@ pageHandler.registerPageCode({
 					return;
 				}
 				const data =xhr.responseJSON
-				console.log(xhr);
 				let table = {
 					head : {
 						row      : ["User","Description","actions"],
@@ -18,8 +17,6 @@ pageHandler.registerPageCode({
 				}
 				data.forEach(
 					(value,key) =>{
-						console.log(value);
-						
 						let profContainer= $('<div></div')
 							.addClass("compressedTableHighed");
 						let profImage = $('<img>').attr("src",value.avatar)
@@ -53,9 +50,6 @@ pageHandler.registerPageCode({
 						}
 					}
 				)
-				console.log(table);
-				console.log($("#RPListTableHolder"));
-				console.log(htmlGen.createTable("#RPListTableHolder",table));
 			}
 		})
 	},

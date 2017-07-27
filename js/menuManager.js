@@ -16,29 +16,22 @@ menuManger = {
 		api.get({
 			url      : "rp/"+newRP,
 			callBack : xhr => {
-				console.log("in callback");
-				console.log(xhr);
 				xhr.responseJSON 
 				&& that.setName(xhr.responseJSON.name)
 			}
 		})
 	},
 	setName  : function(name){
-		console.log("the name is "+ name);
 		this.currentName = name;
-		console.log(this);
 		this.drawMenu();
 	},
 	drawMenu : function(){
-		console.log(this);
 		if(this.currentRP==null){
 			this.menuItems.hide();
 			return;
 		} else {
 			this.menuItems.show();
 		}
-		console.log(this.menuContainer.find("#menuRPName"));
-		console.log(this.currentName);
 		this.menuContainer.find("#menuRPName").html(this.currentName);
 	},
 	hideMenu : function(){

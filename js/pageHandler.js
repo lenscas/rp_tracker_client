@@ -109,4 +109,4 @@ pageHandler = {
 		this.pageCode[id].startUp(params);
 	}
 }
-window.onpopstate = event => console.log(event)//pageHandler.goTo(event.state.url);
+window.onpopstate = event => pageHandler.goTo(event.state.url);

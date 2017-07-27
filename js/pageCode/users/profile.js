@@ -22,7 +22,6 @@ pageHandler.registerPageCode({
 				}
 			]
 		});
-		console.log(tableData.rows);
 		htmlGen.createTable(
 			selector,
 			tableData
@@ -38,7 +37,6 @@ pageHandler.registerPageCode({
 			callBack : function (xhr,status){
 				const data = xhr.responseJSON;
 				$("#profileUserName").text(data.userData.username);
-				console.log(data.madeRPs);
 				that.drawRPTable("#profileMadeRoleplaysContainer",data.madeRPs);
 				that.drawRPTable("#profileJoinRoleplaysContainer",data.joinedRPs);
 			}
