@@ -96,13 +96,13 @@ It also contains the container for each page
 			</div>
 		</nav>
 		<div id="wrapper" class="toggled">
-			<div id="sidebar-wrapper">
-				<ul class="sidebar-nav" id="sidebarNav">
+			<div id="sidebar-wrapper" class="bg-info">
+				<ul class="sidebar-nav " id="sidebarNav">
 					<li>
 						<a class="newPage" href="rp">Overview</a>
 					</li>
 					<li>
-						<h2 id="menuRPName">Test</h2>
+						<h2 id="menuRPName"></h2>
 					</li>
 					<li>
 						<a class="menuItem" href="characters">Characters</a>
@@ -154,9 +154,9 @@ It also contains the container for each page
 					"htmlGenerator",
 					"menuManager"
 				];
+				let loaded=0;
 				function checkDone(){
 					loaded++;
-					console.log(loaded)
 					if(loaded===toLoad.length){
 						//after the app is loaded for the first time we want to know what page to load
 						pageHandler.goTo(window.location.href,false)

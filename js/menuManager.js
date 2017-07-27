@@ -1,23 +1,49 @@
 menuManger = {
 	menuContainer : $("#sidebarNav"),
-	menuItems     : $(".menuItem");
+	menuItems     : $(".menuItem"),
 	currentRP     : null,
-	setWatchingRP : function(newRP){
+	currentName   : null,
+	setWatchingRP : function(newRP,name){
+		if(newRP === this.currentRP){
+			return;
+		}
 		this.currentRP = newRP
+		if(name){
+			this.setName(name);
+			return;
+		}
+		let that = this
+		api.get({
+			url      : "rp/"+newRP,
+			callBack : xhr => {
+				console.log("in callback");
+				console.log(xhr);
+				xhr.responseJSON 
+				&& that.setName(xhr.responseJSON.name)
+			}
+		})
+	},
+	setName  : function(name){
+		console.log("the name is "+ name);
+		this.currentName = name;
+		console.log(this);
 		this.drawMenu();
-	}
-	drawMenu      : function(){
-		if(currentRP==null){
-			menuItems.hide();
+	},
+	drawMenu : function(){
+		console.log(this);
+		if(this.currentRP==null){
+			this.menuItems.hide();
 			return;
 		} else {
-			menuItems.show();
+			this.menuItems.show();
 		}
-		menuContainer.find("#menuRPName").html(this.currentRP.name);
-	}
+		console.log(this.menuContainer.find("#menuRPName"));
+		console.log(this.currentName);
+		this.menuContainer.find("#menuRPName").html(this.currentName);
+	},
 	hideMenu : function(){
 		this.menuContainer.hide();
-	}
+	},
 	showMenu : function(){
 		this.menuContainer.show();
 	}

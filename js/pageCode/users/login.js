@@ -8,6 +8,7 @@ pageHandler.registerPageCode({
 				data : $(this).serialize(),
 				callBack : function(xhr,status){
 					let json = xhr.responseJSON
+					menuManger.showMenu();
 					if(status=="success" && !json.error){
 						pageHandler.goTo(conf.base_url+"profile/"+json.userId);
 					}
@@ -25,6 +26,7 @@ pageHandler.registerPageCode({
 	startUp : function(){
 		console.log("wtf?!");
 		console.log($("#loginForm"));
+		menuManger.hideMenu();
 		htmlGen.createForm("#loginForm",{
 			inputs : [
 				{

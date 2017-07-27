@@ -7,10 +7,8 @@ pageHandler = {
 		let foundRoute     = false;
 		let possibleRoutes = [];
 		let at = 0;
-		console.log(url);
 		addUrl && history.pushState({url : url},"",url);
 		url = url.replace(conf.base_url,"").split("/");
-		console.log(url);
 		Object.keys(routes)
 			.forEach(
 				value => value.split("/").length === url.length && 
@@ -60,6 +58,9 @@ pageHandler = {
 		this.curPageParams = urlData.foundParams;
 		this.hideAllPages();
 		activePage = route[1]
+		if(route.length>=3){
+			menuManger.setWatchingRP(urlData.foundParams[route[2]]);
+		}
 		if(el.length===0){
 			$('<div id="'+ route[1] +'"></div>')
 				.appendTo(this.pageHolder)

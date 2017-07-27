@@ -8,5 +8,5 @@ routes = {
 	"profile/(:any)" : ["users/profile","usersProfile"],
 	//roleplay routes
 	"rp"             : ["rp/list","rpList"],
-	"rp/(:any)"      : ["rp/overView","rpOverView",1],
+	"rp/(:any)"      : ["rp/overView","rpOverView",0],
 }

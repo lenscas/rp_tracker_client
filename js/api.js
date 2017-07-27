@@ -8,7 +8,6 @@ api = {
 		//set more complex behavior based upon the json response and the configuration
 		if(data.followURL){
 			data.complete = function(jqXHR,status){
-				console.log(jqXHR);
 				if(status==="error"){
 					//if(this[jqxhr.)
 					if(jqXHR.responseJSON){
@@ -28,11 +27,11 @@ api = {
 						alertManager.show("Something went wrong. :(");
 					}
 				}
-				data.callBack && console.log(jqXHR); data.callBack(jqXHR,status);
+				data.callBack && data.callBack(jqXHR,status);
 			}
 		}
 		if(!data.complete && data.callBack){
-			data.complete = (jqXHR,status)=>{console.log(jqXHR);data.callBack(jqXHR,status)};
+			data.complete = (jqXHR,status)=>{data.callBack(jqXHR,status)};
 		}
 		data.dataType  = "json";
 		data.url       = conf.api+data.url;
