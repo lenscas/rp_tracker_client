@@ -76,7 +76,6 @@ pageHandler = {
 					}
 				)
 		} else {
-			console.log("test2");
 			this.renderPage(route[1])
 		}
 	},
@@ -85,13 +84,10 @@ pageHandler = {
 	},
 	renderPage : function (id){
 		this.hideAllPages();
-		$("#"+id).show()//.children().show();
-		console.log($("#"+id));
-		console.log(this);
+		$("#"+id).show()
 		this.initCode(id);
 	},
 	registerPageCode : function(newCode){
-		console.log(this.activePage);
 		this.pageCode[this.activePage] = newCode;
 		this.initCode(this.activePage);
 	},

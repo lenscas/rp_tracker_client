@@ -1,6 +1,5 @@
 pageHandler.registerPageCode({
 	startUp : function(pageParams){
-		console.log("test");
 		let that = this;
 		api.get({
 			url      : "rp/",
