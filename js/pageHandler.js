@@ -57,7 +57,7 @@ pageHandler = {
 		const el = $("#"+route[1]);
 		this.curPageParams = urlData.foundParams;
 		this.hideAllPages();
-		activePage = route[1]
+		this.activePage = route[1]
 		if(route.length>=3){
 			menuManger.setWatchingRP(urlData.foundParams[route[2]]);
 		}
@@ -76,18 +76,22 @@ pageHandler = {
 					}
 				)
 		} else {
+			console.log("test2");
 			this.renderPage(route[1])
 		}
 	},
 	hideAllPages : function(){
-		$(this.pageHolder).find("div").hide().find("*").off();
+		$(this.pageHolder).children("div").hide().find("*").off();
 	},
 	renderPage : function (id){
 		this.hideAllPages();
-		$("#"+id).show();
+		$("#"+id).show()//.children().show();
+		console.log($("#"+id));
+		console.log(this);
 		this.initCode(id);
 	},
 	registerPageCode : function(newCode){
+		console.log(this.activePage);
 		this.pageCode[this.activePage] = newCode;
 		this.initCode(this.activePage);
 	},
