@@ -168,9 +168,13 @@ It also contains the container for each page
 				//if the user clicks on a link with the class newPage
 				//instead of having the user follow said link we want to load the page in ourself
 				$("body").on("click","a.newPage",function(event){
-					event.preventDefault()
-					let newUrl = $(this).attr("href")
-					pageHandler.goTo(newUrl)
+					event.preventDefault();
+					let newUrl = $(this).attr("href");
+					if(newUrl.indexOf(conf.base_url) !== -1){
+						console.log("test")
+						newUrl = conf.base_url+newUrl;
+					}
+					pageHandler.goTo(newUrl);
 				})
 			})()
 		</script>
