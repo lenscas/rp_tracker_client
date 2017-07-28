@@ -1,20 +1,27 @@
+//this function is used to more easily generated often used HTML
 htmlGen = {
+	//given a string, it capitalizes the first letter.
+	//though not strictly html
+	//it is used by other functions in this object and can be useful at other places as well
 	capitalizeFirstLetter : function (string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	},
+	//used to create the inputs of a form. 
+	//Selector refers to where it should be appended to
+	//data is an object with form data
 	createForm : function(selector,data){
 		let el = $(selector);
+		//loop over all the inputs that need to be created
 		data.inputs.forEach(value =>{
-			let id          = value.input.id || value.input.name;
+			//set some variables to either the default or what happens to be given
+			let id          = value.input.id   || value.input.name;
 			let type        = value.input.type || "text";
-			
 			let placeholder = value.input.placeholder || 
 				this.capitalizeFirstLetter(value.input.name);
 				
 			let isRequired  = value.input.required==undefined || 
 				value.input.required;
-			
-			
+			//create the input
 			el.append(
 				$('<div class="form-group row"></div>')
 					.append(
@@ -35,6 +42,7 @@ htmlGen = {
 					)
 			);
 		});
+		//add the submit button
 		el.append(
 			$('<div class="form-group row"></div>')
 				.append(
@@ -47,44 +55,57 @@ htmlGen = {
 				)
 		);
 	},
+	//this function is used to create a table
 	createTable : function(selector,data){
+		//first its time to create the very basics of a table
+		//these get expanded later on
 		const el      = $(selector);
 		const head    = $("<thead></thead>");
 		const headRow = $("<tr></tr>").appendTo(head);
 		const body    = $("<tbody></tbody>");
+		//now its time to actually create the table element 
+		//and append the other pieces
 		const table   = $("<table></table>")
 			.addClass(data.head.cssClass || "")
 			.append(head)
 			.append(body)
+		//put the table at the correct place
 		el.append(table);
+		//now its time to create the head of the table
 		data.head.row.forEach( value =>{
+			//first we set some variables to either what is given or their defaults
 			let cssClass= "";
 			let name    = value;
 			if(typeof(value) === "object"){
 				cssClass = value.cssClass || "";
 				name     = vale.name || "";
 			}
+			//now its time to add the <th> to the head row
 			headRow.append(
 				$("<th></th>")
 					.addClass(cssClass)
 					.append(name)
 			);
 		});
+		//having done the head, its now time to fill in the body
 		data.rows.forEach(row => {
+			//first create a new row
 			const curRow = $("<tr></tr>").appendTo(body);
 			let rows = row;
 			if(!Array.isArray(row)){
 				rows = row.row;
 				curRow.addClass(row.cssClass);
 			}
-			
+			//now its time to create the cells in said row
 			rows.forEach(cell => {
+				//as always, first we declare some variables to either what is set or their defaults
 				let content  = cell;
 				let cssClass = ""
 				if((typeof(cell) == "object") && cell.content){
 					content  = cell.content
 					cssClass = cell.cssClass || "";
 				}
+				//and then append it
 				$("<td></td>")
 					//will probably get expanded
 					.append(content)
@@ -94,14 +115,18 @@ htmlGen = {
 		});
 		return table
 	},
+	//used to create a link to another page in this application
 	createLink :function(selector,data){
-		let href     = conf.base_url + data.href || "";
+		//set some variables to either what got set or their defaults
+		let href     = conf.base_url + (data.href || "");
 		let text     = data.text || "";
 		let cssClass = data.cssClass || "";
+		//make the element, add the correct classes, attributes and text
 		let a        = $('<a class="newPage"></a>')
 			.append(text)
 			.attr("href",href)
 			.addClass(cssClass);
+		//if an selector is given, add it to the correct element before returning it
 		if(selector){
 			a.appendTo($(selector));
 		}
