@@ -14,4 +14,6 @@ routes = {
 	//roleplay routes
 	"rp"             : ["rp/list","rpList"],
 	"rp/(:any)"      : ["rp/overView","rpOverView",0],
+	//characters
+	"rp/(:any)/characters/(:any)" : ["characters/overview","charOverView",0],
 }
