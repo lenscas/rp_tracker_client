@@ -50,6 +50,7 @@ pageHandler.registerPageCode({
 						}
 					}
 				)
+				$("#RPListTableHolder").empty();
 				htmlGen.createTable("#RPListTableHolder",table)
 			}
 		})

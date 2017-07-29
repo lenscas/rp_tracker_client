@@ -10,9 +10,11 @@ pageHandler.registerPageCode({
 				const idPrefix = "#roleplayOverview";
 				const data     = xhr.responseJSON;
 				
-				let   table    = $(idPrefix+"Config")
-				let   charCon  = $(idPrefix+"Characters");
-				$(idPrefix+"Desc").append(data.description.replace("\n","<br>"));
+				let   table    = $(idPrefix+"Config").empty();
+				let   charCon  = $(idPrefix+"Characters").empty();
+				$(idPrefix+"Desc")
+					.empty()
+					.append(data.description.replace("\n","<br>"));
 				
 				table.append(
 					$('<tr></tr>')

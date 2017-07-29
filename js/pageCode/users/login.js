@@ -1,4 +1,28 @@
 pageHandler.registerPageCode({
+	once : function(){
+		htmlGen.createForm("#loginForm",{
+			inputs : [
+				{
+					label : "Username",
+					input : {
+						type : "text",
+						name : "username"
+					}
+				},
+				{
+					label : "Password",
+					input : {
+						type : "password",
+						name : "password"
+					}
+				}
+			],
+			button : {
+				color : "primary",
+				text  : "login"
+			}
+		})
+	},
 	bindEvents : function(){
 		$("#loginForm").on("submit",function(event){
 			event.preventDefault();
@@ -24,27 +48,5 @@ pageHandler.registerPageCode({
 	},
 	startUp : function(){
 		menuManger.hideMenu();
-		htmlGen.createForm("#loginForm",{
-			inputs : [
-				{
-					label : "Username",
-					input : {
-						type : "text",
-						name : "username"
-					}
-				},
-				{
-					label : "Password",
-					input : {
-						type : "password",
-						name : "password"
-					}
-				}
-			],
-			button : {
-				color : "primary",
-				text  : "login"
-			}
-		})
 	}
 });

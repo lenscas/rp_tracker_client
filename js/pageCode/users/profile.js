@@ -1,5 +1,6 @@
 pageHandler.registerPageCode({
 	drawRPTable : function(selector,data){
+		$(selector).empty();
 		let tableData = {
 			head : {
 				row      : ["name","description"],

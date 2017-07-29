@@ -86,8 +86,9 @@ pageHandler = {
 		const route = routes[urlData.url]
 		const el = $("#"+route[1]);
 		//change the pageParameters to the ones we currently have and hide all the pages.
-		this.curPageParams = urlData.foundParams;
 		this.hideAllPages();
+		this.unloadCode(this.activePage,this.curPageParams);
+		this.curPageParams = urlData.foundParams;
 		this.activePage = route[1]
 		//if the third parameter is set in the route, update the menu
 		if(route.length>=3){
@@ -128,6 +129,7 @@ pageHandler = {
 	//with an object containing the code that needs to run
 	registerPageCode : function(newCode){
 		this.pageCode[this.activePage] = newCode;
+		newCode.once && newCode.once();
 		this.initCode(this.activePage);
 	},
 	loadCode : function(pathPart,callback){
@@ -146,6 +148,12 @@ pageHandler = {
 		this.pageCode[id] &&
 		this.pageCode[id].startUp && 
 		this.pageCode[id].startUp(params);
-	}
+	},
+	unloadCode : function(id,params){
+		this.pageCode[id] &&
+		this.pageCode[id].unload && 
+		this.pageCode[id].unload(params);
+	},
+	
 }
 window.onpopstate = event => pageHandler.goTo(event.state.url);
