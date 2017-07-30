@@ -78,7 +78,7 @@ htmlGen = {
 			let name    = value;
 			if(typeof(value) === "object"){
 				cssClass = value.cssClass || "";
-				name     = vale.name || "";
+				name     = value.name || value.text || "";
 			}
 			//now its time to add the <th> to the head row
 			headRow.append(
