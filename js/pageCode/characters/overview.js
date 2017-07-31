@@ -97,15 +97,6 @@ pageHandler.registerPageCode({
 	},
 	bindEventsAfterGet : function(){
 		simpleEvents.togglePanelShow(".charOverClickHide","click");
-		/*
-		$(".charOverClickHide").on("click",function(event){
-			if(event.isDefaultPrevented()){
-				return;
-			}
-			event.preventDefault();
-			$(this).children(".panel-body").toggle();
-		})
-		* */
 	},
 	unload : function(){
 		$(".charOverClickHide").off("click");

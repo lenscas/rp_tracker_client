@@ -32,6 +32,8 @@ pageHandler.registerPageCode({
 		});
 	},
 	startUp : function(pageParams){
+		console.log("WTF!");
+		simpleEvents.togglePanelShow(".profileCollapseablePanel","click");
 		let that = this;
 		api.get({
 			url      : "users/"+pageParams[0],
@@ -40,8 +42,10 @@ pageHandler.registerPageCode({
 				$("#profileUserName").text(data.userData.username);
 				that.drawRPTable("#profileMadeRoleplaysContainer",data.madeRPs);
 				that.drawRPTable("#profileJoinRoleplaysContainer",data.joinedRPs);
+				simpleEvents.togglePanelShow(".profileCollapseablePanel","on");
 			}
 		})
-	}
+	},
+	unload :()=>$(".profileCollapseablePanel").off("click")
 	
 })

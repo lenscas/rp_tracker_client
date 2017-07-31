@@ -18,7 +18,7 @@ pageHandler.registerPageCode({
 	startUp : function(params){
 		this.rpCode = params[0];
 		let that = this;
-		
+		$(this.idPrefix+"Battles").empty();
 		api.get({
 			url : "rp/"+this.rpCode+"/battles",
 			callBack : function(xhr,status){
@@ -53,7 +53,7 @@ pageHandler.registerPageCode({
 	},
 	getPanel : function(battle){
 		return htmlGen.createPanel(
-			$(this.idPrefix+"Battles").empty(),
+			this.idPrefix+"Battles",
 			{
 				title : this.getPanelHeading(battle),
 				color : this.getRandomColor() + " battleListHide"
@@ -104,6 +104,7 @@ pageHandler.registerPageCode({
 			char.turnOrder
 		];
 		return row;
-	}
+	},
+	unload : ()=>$(".battleListHide").off("click")
 	
 })
