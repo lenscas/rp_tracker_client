@@ -18,6 +18,7 @@ pageHandler.registerPageCode({
 	startUp : function(params){
 		this.rpCode = params[0];
 		let that = this;
+		
 		api.get({
 			url : "rp/"+this.rpCode+"/battles",
 			callBack : function(xhr,status){
@@ -51,9 +52,8 @@ pageHandler.registerPageCode({
 		})
 	},
 	getPanel : function(battle){
-		console.log(this);
 		return htmlGen.createPanel(
-			this.idPrefix+"Battles",
+			$(this.idPrefix+"Battles").empty(),
 			{
 				title : this.getPanelHeading(battle),
 				color : this.getRandomColor() + " battleListHide"
