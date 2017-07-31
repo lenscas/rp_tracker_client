@@ -96,6 +96,8 @@ pageHandler.registerPageCode({
 		container.append(notes.replace("\n",'<br>'));
 	},
 	bindEventsAfterGet : function(){
+		simpleEvents.togglePanelShow(".charOverClickHide","click");
+		/*
 		$(".charOverClickHide").on("click",function(event){
 			if(event.isDefaultPrevented()){
 				return;
@@ -103,6 +105,7 @@ pageHandler.registerPageCode({
 			event.preventDefault();
 			$(this).children(".panel-body").toggle();
 		})
+		* */
 	},
 	unload : function(){
 		$(".charOverClickHide").off("click");

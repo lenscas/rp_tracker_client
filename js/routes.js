@@ -17,4 +17,6 @@ routes = {
 	//characters
 	"rp/(:any)/characters"        : ["characters/list","charList",0],
 	"rp/(:any)/characters/(:any)" : ["characters/overview","charOverView",0],
+	//battles
+	"rp/(:any)/battles"           : ["battles/list","battlesList",0],
 }

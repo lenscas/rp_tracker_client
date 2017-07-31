@@ -10,3 +10,9 @@
 .sidebar-nav li a.menuItem {
 	display : none;
 }
+/* elements with the btn style don't like the pull-right class
+   This style tries to fix some of the issues with it.
+*/
+.btnFixPullRight {
+	display:inline;
+}

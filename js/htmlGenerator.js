@@ -131,5 +131,26 @@ htmlGen = {
 			a.appendTo($(selector));
 		}
 		return a;
+	},
+	createPanel : function(selector,data){
+		const color = (data.color || "") && "panel-"+data.color;
+		const title =  data.title || "";
+		const text  =  data.text  || "";
+		let panel = $('<div></div>')
+			.addClass("panel "+color)
+			.append(
+				$('<div></div>')
+					.addClass("panel-heading")
+					.html(title)
+			).append(
+				$('<div></div>')
+					.addClass("panel-body")
+					.append(text)
+			);
+		if(selector){
+			panel.appendTo(selector)
+		}
+		return panel;
 	}
 }
+
