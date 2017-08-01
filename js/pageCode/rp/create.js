@@ -52,5 +52,23 @@ pageHandler.registerPageCode({
 			}
 		],
 		button : {color : "success",text  : "Create"}
+	},
+	bindEvents : function(){
+		$("#createRPForm").on("submit",function(event){
+			event.preventDefault();
+			api.post({
+				url  : "rp",
+				data : $(this).serialize(),
+				callBack : function(xhr,status){
+					if(status=="success" && !json.error){
+						console.log("test?");
+						let location =xhr.getResponseHeader("location")
+						location = location.replace(conf.api,"");
+						let json = xhr.responseJSON
+						pageHandler.goTo(conf.base_url+location);
+					}
+				}
+			});
+		});
 	}
 })

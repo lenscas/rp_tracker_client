@@ -26,10 +26,10 @@ api = {
 								jqXHR.responseJSON.error
 							)
 						} else if(jqXHR.responseJSON.errors){
-							Object.keys(jqXHR.responseJSON.error)
+							Object.keys(jqXHR.responseJSON.errors)
 								.forEach(value =>
 									alertManager.show(
-										jqXHR.responseJSON.error[value]
+										jqXHR.responseJSON.errors[value]
 									)
 							);
 						}
