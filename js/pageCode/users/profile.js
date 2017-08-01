@@ -32,7 +32,6 @@ pageHandler.registerPageCode({
 		});
 	},
 	startUp : function(pageParams){
-		console.log("WTF!");
 		simpleEvents.togglePanelShow(".profileCollapseablePanel","click");
 		let that = this;
 		api.get({

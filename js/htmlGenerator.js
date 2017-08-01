@@ -13,34 +13,32 @@ htmlGen = {
 		let el = $(selector);
 		//loop over all the inputs that need to be created
 		data.inputs.forEach(value =>{
-			//set some variables to either the default or what happens to be given
-			let id          = value.input.id   || value.input.name;
-			let type        = value.input.type || "text";
-			let placeholder = value.input.placeholder || 
-				this.capitalizeFirstLetter(value.input.name);
-				
-			let isRequired  = value.input.required==undefined || 
-				value.input.required;
-			//create the input
-			el.append(
-				$('<div class="form-group row"></div>')
-					.append(
-						$('<label>'+value.label+'</label>')
-						.attr("for",id)
-						.addClass("col-sm-3 col-form-label")
-					).append(
-						$('<div class="col-sm-9"></div>')
-							.append(
-								$('<input>')
-									.addClass("form-control")
-									.attr("type",type)
-									.attr("id", id)
-									.attr("placeholder", placeholder)
-									.prop("required", isRequired)
-									.attr("name",value.input.name)
-							)
-					)
-			);
+			input = {
+				name        : value.input.name,
+				id          : value.input.id              || value.input.name,
+				type        : value.input.type            || "text",
+				options     : value.input.options         || [],
+				isFancy     : !("isFancy" in value.input) || value.input.isFancy,
+				placeholder : value.input.placeholder     || 
+					this.capitalizeFirstLetter(value.input.name),
+				isRequired  : value.input.required==undefined || 
+					value.input.required
+			}
+			let inputGroup = $('<div class="form-group row"></div>')
+				.append(
+					$('<label>'+value.label+'</label>')
+					.attr("for",input.id)
+					.addClass("col-sm-3 col-form-label")
+				);
+			let inputContainer = $('<div class="col-sm-9"></div>');
+			newInput = this.createInput(input)
+				.addClass("form-control")
+				.attr("type",input.type)
+				.attr("id", input.id)
+				.prop("required", input.isRequired)
+				.attr("name",input.name)
+			inputContainer.append(newInput).appendTo(inputGroup);
+			inputGroup.appendTo(el);
 		});
 		//add the submit button
 		el.append(
@@ -54,6 +52,34 @@ htmlGen = {
 						)
 				)
 		);
+	},
+	createInput : function(input){
+		let newInput;
+		switch(input.type){
+			case "select" :
+				newInput = $('<select></select>')
+				input.options.forEach(value =>{
+					newInput.append(
+						$('<option></option>')
+							.attr("value",value.value)
+							.html(value.text)
+					);
+				});
+				break;
+			case "textarea" :
+				newInput = $('<textarea></textarea>').html(input.placeholder);
+				if(input.isFancy){
+					console.log("It should be a fancy editor");
+				}
+				break;
+			default :
+				newInput = $('<input>')
+					.attr("type",input.type)
+					.attr("placeholder",input.placeholder);
+				break;
+		}
+		return newInput;
+		
 	},
 	//this function is used to create a table
 	createTable : function(selector,data){
@@ -153,4 +179,3 @@ htmlGen = {
 		return panel;
 	}
 }
-

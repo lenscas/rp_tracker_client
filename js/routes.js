@@ -13,10 +13,12 @@ routes = {
 	"profile/(:any)" : ["users/profile","usersProfile"],
 	//roleplay routes
 	"rp"             : ["rp/list","rpList"],
+	"create/rp"      : ["rp/create","createRP"],
 	"rp/(:any)"      : ["rp/overView","rpOverView",0],
 	//characters
 	"rp/(:any)/characters"        : ["characters/list","charList",0],
 	"rp/(:any)/characters/(:any)" : ["characters/overview","charOverView",0],
 	//battles
 	"rp/(:any)/battles"           : ["battles/list","battlesList",0],
+	
 }
