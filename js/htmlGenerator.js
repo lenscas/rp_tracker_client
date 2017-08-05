@@ -11,18 +11,21 @@ htmlGen = {
 	//data is an object with form data
 	createForm : function(selector,data){
 		let el = $(selector);
+		const idPrefix = data.idPrefix || "form"+Math.random();
+		data.inputs = data.inputs || [];
 		//loop over all the inputs that need to be created
 		data.inputs.forEach(value =>{
 			input = {
-				name        : value.input.name,
-				id          : value.input.id              || value.input.name,
-				type        : value.input.type            || "text",
-				options     : value.input.options         || [],
-				isFancy     : !("isFancy" in value.input) || value.input.isFancy,
-				placeholder : value.input.placeholder     || 
-					this.capitalizeFirstLetter(value.input.name),
-				isRequired  : value.input.required==undefined || 
-					value.input.required
+				name : value.input.name,
+				id : value.input.id || idPrefix+value.input.name,
+				type : value.input.type || "text",
+				options : value.input.options || [],
+				isFancy : !("isFancy" in value.input) || value.input.isFancy,
+				placeholder : value.input.placeholder || 
+					this.capitalizeFirstLetter(value.label),
+				isRequired  : !( "required" in value.input) || value.input.required,
+				value : "value" in value.input ? value.input.value.toString() :"",
+				cssClass : value.input.cssClass || ""
 			}
 			let inputGroup = $('<div class="form-group row"></div>')
 				.append(
@@ -33,14 +36,21 @@ htmlGen = {
 			let inputContainer = $('<div class="col-sm-9"></div>');
 			newInput = this.createInput(input)
 				.addClass("form-control")
+				.addClass(input.cssClass)
 				.attr("type",input.type)
 				.attr("id", input.id)
 				.prop("required", input.isRequired)
-				.attr("name",input.name)
+				.attr("name",input.name);
+			if(input.value){
+				newInput.val(input.value);
+			}
 			inputContainer.append(newInput).appendTo(inputGroup);
 			inputGroup.appendTo(el);
 		});
 		//add the submit button
+		if(!data.button){
+			return;
+		}
 		el.append(
 			$('<div class="form-group row"></div>')
 				.append(

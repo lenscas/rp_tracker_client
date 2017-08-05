@@ -60,11 +60,10 @@ pageHandler.registerPageCode({
 				url  : "rp",
 				data : $(this).serialize(),
 				callBack : function(xhr,status){
+					let json = xhr.responseJSON;
 					if(status=="success" && !json.error){
-						console.log("test?");
 						let location =xhr.getResponseHeader("location")
 						location = location.replace(conf.api,"");
-						let json = xhr.responseJSON
 						pageHandler.goTo(conf.base_url+location);
 					}
 				}

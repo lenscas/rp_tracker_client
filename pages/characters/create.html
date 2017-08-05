@@ -1,0 +1,41 @@
+<div class="col-md-12">
+	<div class="panel panel-default">
+		<div class="panel-heading text-center">
+			<h4>Create character</h4>
+		</div>
+		<div class="panel-body">
+			<form id="createCharacterForm" method="POST">
+				<div class="panel panel-primary createCharacterPanels">
+					<div class="panel-heading">
+						Basic
+					</div>
+					<div class="panel-body" id="createCharacterBasic">
+					</div>
+				</div>
+				<div class="panel panel-success createCharacterPanels">
+					<div class="panel-heading">
+						Stats
+					</div>
+					<div class="panel-body" >
+						<div id="createCharacterStats"></div>
+						<div class="row">
+							<div class="col-sm-3">Total</div>
+							<div class="col-sm-9" id="createCharacterStatTotal">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-info createCharacterPanels">
+					<div class="panel-heading">
+						Abilities
+					</div>
+					<div class="panel-body" id="createCharacterAbilities">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	pageHandler.loadCode("characters/create")
+</script>

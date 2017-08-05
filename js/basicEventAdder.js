@@ -1,5 +1,6 @@
 simpleEvents = {
 	togglePanelShow : function(selector,on){
+		on = on || "click";
 		$(selector).on(on,function(event){
 			if(event.isDefaultPrevented()){
 				return;
