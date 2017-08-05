@@ -15,6 +15,7 @@ htmlGen = {
 		data.inputs = data.inputs || [];
 		//loop over all the inputs that need to be created
 		data.inputs.forEach(value =>{
+			value.row = value.row || {};
 			input = {
 				name : value.input.name,
 				id : value.input.id || idPrefix+value.input.name,
@@ -28,10 +29,12 @@ htmlGen = {
 				cssClass : value.input.cssClass || ""
 			}
 			let inputGroup = $('<div class="form-group row"></div>')
+				.addClass(value.row.cssClass || "")
 				.append(
 					$('<label>'+value.label+'</label>')
 					.attr("for",input.id)
 					.addClass("col-sm-3 col-form-label")
+					
 				);
 			let inputContainer = $('<div class="col-sm-9"></div>');
 			newInput = this.createInput(input)
