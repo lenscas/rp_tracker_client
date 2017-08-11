@@ -20,19 +20,18 @@ api = {
 		if(data.followURL){
 			data.complete = function(jqXHR,status){
 				if(status==="error"){
-					if(jqXHR.responseJSON){
-						if(jqXHR.responseJSON.error){
-							alertManager.show(
-								jqXHR.responseJSON.error
-							)
-						} else if(jqXHR.responseJSON.errors){
-							Object.keys(jqXHR.responseJSON.errors)
-								.forEach(value =>
-									alertManager.show(
-										jqXHR.responseJSON.errors[value]
-									)
-							);
-						}
+					const data =jqXHR.responseJSON || {};
+					if(data.error){
+						alertManager.show(
+							jqXHR.responseJSON.error
+						)
+					} else if(data.errors){
+						Object.keys(data.errors)
+							.forEach(value =>
+								alertManager.show(
+									data.errors[value]
+								)
+						);
 					} else {
 						alertManager.show("Something went wrong. :(");
 					}
@@ -60,6 +59,16 @@ api = {
 	get : function(data){
 		data.followURL = false
 		data.method    = "GET"
+		this.call(data);
+	},
+	put : function(data){
+		data.followURL = true,
+		data.method    = "PUT",
+		this.call(data);
+	},
+	delete : function(data){
+		data.followURL = true,
+		data.method    = "DELETE",
 		this.call(data);
 	}
 }

@@ -1,4 +1,4 @@
-pageHandler.registerPageCode({
+codeHandler.registerPageCode({
 	rpCode : "",
 	getBaseUrl : function(){
 		return "rp/"+this.rpCode+"/";

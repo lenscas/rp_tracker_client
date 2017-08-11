@@ -1,4 +1,4 @@
-pageHandler.registerPageCode({
+codeHandler.registerPageCode({
 	startUp : function(params){
 		const rpCode   = params[0];
 		const charCode = params[1];

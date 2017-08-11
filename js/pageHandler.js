@@ -1,13 +1,12 @@
 //this function handels loading other pages, loading code for those pages and going to said pages
 pageHandler = {
 	pageHolder    : "#pageHolder",
-	pageCode      : {},
 	activePage    : "",
-	curPageParams : [],
 	//given an url, this function will grab the correct html and display it
 	//similar to what normally happens when you click on a link
 	//using the addUrl param we can change if we want the url in the browser to be updated as well
 	goTo          : function(url,addUrl=true){
+		console.log("oops?");
 		//used to check if we have an url that fits
 		let foundRoute     = false;
 		//list of all the possible routes
@@ -87,8 +86,8 @@ pageHandler = {
 		const el = $("#"+route[1]);
 		//change the pageParameters to the ones we currently have and hide all the pages.
 		this.hideAllPages();
-		this.unloadCode(this.activePage,this.curPageParams);
-		this.curPageParams = urlData.foundParams;
+		codeHandler.unloadCode(this.activePage,this.curPageParams);
+		codeHandler.curPageParams = urlData.foundParams;
 		this.activePage = route[1]
 		//if the third parameter is set in the route, update the menu
 		if(route.length>=3){
@@ -123,37 +122,7 @@ pageHandler = {
 	renderPage : function (id){
 		this.hideAllPages();
 		$("#"+id).show()
-		this.initCode(id);
+		codeHandler.initCode(id);
 	},
-	//if a page is loaded and needs js to run it needs to call this function 
-	//with an object containing the code that needs to run
-	registerPageCode : function(newCode){
-		this.pageCode[this.activePage] = newCode;
-		newCode.once && newCode.once();
-		this.initCode(this.activePage);
-	},
-	loadCode : function(pathPart,callback){
-		$.getScript(conf.js+"pageCode/"+pathPart+".js",callback);
-	},
-	initCode : function(id){
-		this.startUp(id,this.curPageParams);
-		this.bindEvents(id,this.curPageParams);
-	},
-	bindEvents : function(id,params) {
-		this.pageCode[id] && 
-		this.pageCode[id].bindEvents && 
-		this.pageCode[id].bindEvents(params);
-	},
-	startUp : function(id,params){
-		this.pageCode[id] &&
-		this.pageCode[id].startUp && 
-		this.pageCode[id].startUp(params);
-	},
-	unloadCode : function(id,params){
-		this.pageCode[id] &&
-		this.pageCode[id].unload && 
-		this.pageCode[id].unload(params);
-	},
-	
 }
 window.onpopstate = event => pageHandler.goTo(event.state.url);

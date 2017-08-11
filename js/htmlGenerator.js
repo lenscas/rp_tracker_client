@@ -134,22 +134,37 @@ htmlGen = {
 			if(!Array.isArray(row)){
 				rows = row.row;
 				curRow.addClass(row.cssClass);
+				if(row.data){
+					curRow.data(row.data.name,row.data.value);
+				}
+				
 			}
 			//now its time to create the cells in said row
 			rows.forEach(cell => {
 				//as always, first we declare some variables to either what is set or their defaults
 				let content  = cell;
 				let cssClass = ""
+				let dataName = "";
+				let dataVal  = "";
 				if((typeof(cell) == "object") && cell.content){
 					content  = cell.content
 					cssClass = cell.cssClass || "";
+					if(cell.data){
+						dataName = cell.data.name;
+						dataVal  = cell.data.value;
+					}
 				}
 				//and then append it
-				$("<td></td>")
+				let td = $("<td></td>")
 					//will probably get expanded
 					.append(content)
 					.addClass(cssClass)
 					.appendTo(curRow);
+				if(dataName && dataVal){
+					td.data(dataName,dataVal);
+				}
+				
+					
 			});
 		});
 		return table

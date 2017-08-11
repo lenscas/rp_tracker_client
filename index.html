@@ -149,6 +149,7 @@ It also contains the container for each page
 				let toLoad =[
 					"routes",
 					"pageHandler",
+					"codeHandler",
 					"alertManager",
 					"api",
 					"htmlGenerator",
@@ -172,7 +173,6 @@ It also contains the container for each page
 					event.preventDefault();
 					let newUrl = $(this).attr("href");
 					if(newUrl.indexOf(conf.base_url) === -1){
-						console.log("test")
 						newUrl = conf.base_url+newUrl;
 					}
 					pageHandler.goTo(newUrl);

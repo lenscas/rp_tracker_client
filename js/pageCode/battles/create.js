@@ -1,4 +1,4 @@
-pageHandler.registerPageCode({
+codeHandler.registerPageCode({
 	idPrefix : "#createBattle",
 	charList : [],
 	once     : function(){

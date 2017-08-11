@@ -1,4 +1,4 @@
-pageHandler.registerPageCode({
+codeHandler.registerPageCode({
 	startUp : function(pageParams){
 		let that = this;
 		api.get({

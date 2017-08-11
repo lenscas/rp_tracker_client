@@ -1,4 +1,4 @@
-pageHandler.registerPageCode({
+codeHandler.registerPageCode({
 	drawRPTable : function(selector,data){
 		$(selector).empty();
 		let tableData = {

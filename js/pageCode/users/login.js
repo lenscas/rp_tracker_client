@@ -1,4 +1,4 @@
-pageHandler.registerPageCode({
+codeHandler.registerPageCode({
 	once : function(){
 		htmlGen.createForm("#loginForm",{
 			inputs : [
