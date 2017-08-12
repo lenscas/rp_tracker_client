@@ -6,7 +6,6 @@ pageHandler = {
 	//similar to what normally happens when you click on a link
 	//using the addUrl param we can change if we want the url in the browser to be updated as well
 	goTo          : function(url,addUrl=true){
-		console.log("oops?");
 		//used to check if we have an url that fits
 		let foundRoute     = false;
 		//list of all the possible routes

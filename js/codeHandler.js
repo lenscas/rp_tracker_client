@@ -13,7 +13,6 @@ codeHandler = {
 			}
 			this.loadDependencies(newCode.dependencies,callBack);
 		} else {
-			console.log("??");
 			newCode.once && newCode.once();
 			this.initCode(pageHandler.activePage);
 		}
