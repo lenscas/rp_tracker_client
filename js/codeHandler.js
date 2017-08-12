@@ -5,7 +5,7 @@ codeHandler = {
 	//if a page is loaded and needs js to run it needs to call this function 
 	//with an object containing the code that needs to run
 	registerPageCode : function(newCode){
-		this.pageCode[this.activePage] = newCode;
+		this.pageCode[pageHandler.activePage] = newCode;
 		if(newCode.dependencies){
 			let callBack = (()=>this.initCode(this.activePage))
 			if(newCode.once){
@@ -13,8 +13,9 @@ codeHandler = {
 			}
 			this.loadDependencies(newCode.dependencies,callBack);
 		} else {
+			console.log("??");
 			newCode.once && newCode.once();
-			this.initCode(this.activePage);
+			this.initCode(pageHandler.activePage);
 		}
 		
 	},
@@ -66,6 +67,6 @@ codeHandler = {
 		this.pageCode[id].unload(params);
 	},
 	rerun : function(){
-		this.initCode(this.activePage);
+		this.initCode(pageHandler.activePage);
 	}
 }
