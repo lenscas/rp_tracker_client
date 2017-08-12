@@ -9,7 +9,7 @@ codeHandler = {
 		if(newCode.dependencies){
 			let callBack = (()=>this.initCode(this.activePage))
 			if(newCode.once){
-				callBack = (()=>{newCode.once();this.initCode(this.activePage)})
+				callBack = (()=>{newCode.once();this.initCode(pageHandler.activePage)})
 			}
 			this.loadDependencies(newCode.dependencies,callBack);
 		} else {
