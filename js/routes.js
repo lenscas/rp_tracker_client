@@ -22,6 +22,5 @@ routes = {
 	//battles
 	"create/battle/(:any)"        : ["battles/create","createBattle",0],
 	"rp/(:any)/battles"           : ["battles/list","battlesList",0],
-	
-	
+	"rp/(:any)/battles/(:any)"    : ["battles/manage","battleMannage",0],
 }

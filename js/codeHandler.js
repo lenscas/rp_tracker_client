@@ -2,44 +2,64 @@ codeHandler = {
 	pageCode      : {},
 	curPageParams : [],
 	loadedDeps    : {},
+	loadedHTMLDeps: {},
 	//if a page is loaded and needs js to run it needs to call this function 
 	//with an object containing the code that needs to run
 	registerPageCode : function(newCode){
 		this.pageCode[pageHandler.activePage] = newCode;
-		if(newCode.dependencies){
-			let callBack = (()=>this.initCode(this.activePage))
-			if(newCode.once){
-				callBack = (()=>{newCode.once();this.initCode(pageHandler.activePage)})
-			}
-			this.loadDependencies(newCode.dependencies,callBack);
-		} else {
-			newCode.once && newCode.once();
-			this.initCode(pageHandler.activePage);
+		const deps = {
+			js   : newCode.dependencies || [],
+			html : newCode.depsHTML     || [],
 		}
-		
+		let callBack = (()=>this.initCode(pageHandler.activePage))
+		if(newCode.once){
+			callBack = (()=>{
+				newCode.once();
+				this.initCode(pageHandler.activePage)
+			})
+		}
+		this.loadDependencies(deps,callBack);
 	},
-	loadDependencies : function(depList,callBack){
-		//first, loop over the list so we can strip away what is already loaded
-		let strippedList = [];
-		depList.forEach(
-			value=>(!this.loadedDeps[value]) && strippedList.push(value)
-		);
-		if(strippedList.length===0){
-			callBack();
+	loadDependencies : function(deps,callBack){
+		deps = !Array.isArray(deps) ? deps :{js :deps } ;
+		let strippedList = {html :[], js : []};
+		Object.keys(deps).forEach(key => {
+			deps[key].forEach(
+				dep => strippedList[key].push(dep)
+			);
+		});
+		const that = this;
+		const check = function(value,kind){
+			if(!kind){
+				this.counter=0;
+				this.max = 0;
+				Object.keys(strippedList).forEach(
+					value => {
+						this.max = this.max +strippedList[value].length
+					}
+				);
+			} else {
+				this.counter++;
+				if(kind==="js"){
+					that.loadedDeps[value]=true;
+				} else {
+					that.loadedHTMLDeps[value]=true;
+				}
+			}
+			this.counter===this.max && callBack();
 		}
-		//the counter is a way to check how many modules from the list have been loaded
-		//if the amount is equal to the amount of dependencies that should have been loaded we have them all
-		let counter = 0;
+		check();
 		//this actually loads all the dependencies.
-		strippedList.forEach(
+		strippedList.js.forEach(
 			value => $.getScript(
 				conf.js+"modules/"+value+".js",
-				//this checks if we have loaded all the dependencies and checks if we 
-				()=>{
-					counter++;
-					this.loadedDeps[value]=true;
-					counter===strippedList.length && callBack();
-				}
+				()=>check(value,"js")
+			)
+		);
+		strippedList.html.forEach(
+			value => $("#htmlDepsContainer").load(
+				conf.base_url + "html/"+value+".html",
+				()=>check(value,"html")
 			)
 		);
 	},

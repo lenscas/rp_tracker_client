@@ -1,3 +1,3 @@
 RewriteEngine on
-RewriteRule ^\b([a-z0-9]+)\b(?<!pages|css|js) index.html [NC]
+RewriteRule ^\b([a-z0-9]+)\b(?<!pages|css|js|html) index.html [NC]
 RewriteRule ^about$ index.html [NC]
