@@ -21,7 +21,6 @@ codeHandler.registerPageCode({
 				that.config = xhr.responseJSON.data
 				that.fillCharacters();
 				that.fillAbilities();
-				
 			}
 		})
 	},

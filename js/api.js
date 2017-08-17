@@ -70,5 +70,10 @@ api = {
 		data.followURL = true,
 		data.method    = "DELETE",
 		this.call(data);
+	},
+	patch : function(data){
+		data.followUrl = true,
+		data.method    = "PATCH",
+		this.call(data);
 	}
 }
