@@ -163,7 +163,7 @@ codeHandler.registerPageCode({
 	fillManageer : function(){
 		const makeInputs = (selector,name)=>{
 			const selectChar = $('<select></select>')
-				.addClass("selectChar form-control")
+				.addClass("selectChar updateStat form-control")
 				.appendTo(selector);
 			this.characters.forEach(value=>selectChar.append($('<option></option>')
 					.val(value.code)
@@ -171,7 +171,7 @@ codeHandler.registerPageCode({
 				)
 			);
 			const selectStat = $('<select></select>')
-				.addClass("selectStat form-control")
+				.addClass("selectStat updateStat form-control")
 				.appendTo(selector);
 			this.config.statSheet.forEach(value=>selectStat.append(
 				$('<option></option>')
@@ -218,6 +218,22 @@ codeHandler.registerPageCode({
 			enableSafeButton : this.config.isGM
 		});
 		this.battleDisplay.makeForm();
-		
+		this.updateInputs(this.attackerPanel);
+		this.updateInputs(this.defenderPanel);
+		this.bindEventsLate();
+	},
+	updateInputs : function(cont){
+		const charCode = cont.find(".selectChar").val();
+		const statId   = cont.find(".selectStat").val();
+		const total    = this.characterTableMan.findCorrectMods(charCode,statId);
+		cont.find(".showCurrentAmount").val(total);
+	},
+	bindEventsLate : function(){
+		const that = this;
+		$(".updateStat").on("change",function(){
+			const el   = $(this);
+			const cont = el.closest(".panel-body");
+			that.updateInputs(cont);
+		});
 	}
 })
