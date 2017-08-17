@@ -67,7 +67,7 @@ codeHandler.registerPageCode({
 				htmlGen.createLink(
 					false,
 					{
-						href : this.getBaseUrl() +"battle/"+battle.id,
+						href : this.getBaseUrl() +"battles/"+battle.id,
 						text : battle.name,
 					}
 				)
