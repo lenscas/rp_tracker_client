@@ -1,11 +1,11 @@
 codeHandler.registerPageCode({
-	startUp : function(params){
+	depsHTML : ["modal"],
+	startUp  : function(params){
 		const rpCode   = params[0];
 		const charCode = params[1];
-		let that = this;
 		api.get({
 			url : "rp/"+rpCode+"/characters/"+charCode,
-			callBack : function(xhr,status){
+			callBack : (xhr,status)=>{
 				if(status!=="success"){
 					return;
 				}
@@ -13,66 +13,71 @@ codeHandler.registerPageCode({
 				const data      = xhr.responseJSON;
 				const character = data.character;
 				const canEdit   = data.canEdit; //not used yet
-				const abilities = data.abilities;
+				this.abilities  = data.abilities;
 				//get the relevant html
-				const idPrefix    = "#charOverView";
-				const stats       = $(idPrefix+"Stats").empty();
-				const apearance   = $(idPrefix+"Appearance").empty();
-				const abilityCont = $(idPrefix+"Abilities").empty();
-				const personality = $(idPrefix+"Personality").empty();
-				const notes       = $(idPrefix+"Notes").empty();
-				const backstory   = $(idPrefix+"Backstory").empty();
-				//start by filling in the stats
-				that.stats(stats,character.stats,character.age);
-				that.appearance(
-					apearance,
-					character.appearanceDescription,
-					character.appearancePicture,
-					character.isLocalImage
-				);
-				that.backstory(backstory,character.backstory);
-				that.abilities(abilityCont,abilities);
-				that.personality(personality,character.personality);
-				that.notes(notes,"some test notes");
-				$(idPrefix+"Name").html(character.name);
-				that.bindEventsAfterGet();
+				this.idPrefix        = "#charOverView";
+				this.statsCont       = $(this.idPrefix+"Stats").empty();
+				this.apearanceCont   = $(this.idPrefix+"Appearance").empty();
+				this.abilityCont     = $(this.idPrefix+"Abilities").empty();
+				this.personalityCont = $(this.idPrefix+"Personality").empty();
+				this.notesCont       = $(this.idPrefix+"Notes").empty();
+				this.backstoryCont   = $(this.idPrefix+"Backstory").empty();
+				this.character       = character;
+				//start by filling in the stats stats,character.stats,character.age
+				this.fillStats();
+				this.fillAppearance();
+				this.fillBackstory();
+				this.fillAbilities();
+				this.fillPersonality();
+				this.fillNotes();
+				$(this.idPrefix+"Name").html(character.name);
+				this.bindEventsAfterGet();
+				
 			}
 		})
 	},
-	stats : function(container,stats,age){
+	fillStats : function(){
 		let table = {
 			head : {
 				row      : ["Name","Amount"],
 				cssClass : "table table-striped"
 			},
 			rows : [
-				["age",age]
+				["age",this.character.age]
 			]
 		};
-		stats.forEach(value =>table.rows.push([value.name,value.value]))
-		let tableEl = htmlGen.createTable(container,table);
+		this.character.stats.forEach(
+			value =>table.rows.push(
+				[value.name,value.value]
+			)
+		)
+		htmlGen.createTable(this.statsCont,table);
 	},
-	appearance : function(container,text,image,imageIsLocal){
-		if(image){
-			if(imageIsLocal && imageIsLocal!="0"){
+	fillAppearance : function(){
+		if(this.character.appearancePicture){
+			if(this.character.isLocalImage && this.character.isLocalImage!="0"){
 				image = conf.api_base +image
+			} else {
+				image = this.character.appearancePicture
 			}
-			container.append(
+			this.apearanceCont.append(
 				$('<img>')
 					.attr("src",image)
 					.addClass("img-responsive")
 			);
 		}
-		if(text){
-			container.append(text.replace("\n","<br>"));
+		if(this.character.appearanceDescription){
+			this.apearanceCont.append(
+				this.character.appearanceDescription.replace("\n","<br>")
+			);
 		}
 	},
-	backstory : function(container,backstory){
-		container.append(backstory.replace("\n","<br>"));
+	fillBackstory : function(){
+		this.backstoryCont.append(this.character.backstory.replace("\n","<br>"));
 	},
-	abilities : function(container,abilities){
-		abilities.forEach(value=>{
-			container.append(
+	fillAbilities : function(container,abilities){
+		this.abilities.forEach(value=>{
+			this.abilityCont.append(
 				$('<div class="panel charOverClickHide panel-warning"></div>')
 					.append(
 						$('<div class="panel-heading"></div>')
@@ -89,11 +94,13 @@ codeHandler.registerPageCode({
 			)
 		});
 	},
-	personality : function(container,personality){
-		container.append(personality.replace("\n",'<br>'));
+	fillPersonality : function(container,personality){
+		this.personalityCont.append(
+			this.character.personality.replace("\n",'<br>')
+		);
 	},
-	notes : function(container,notes){
-		container.append(notes.replace("\n",'<br>'));
+	fillNotes : function(container,notes){
+		this.notesCont.append(this.character.notes.replace("\n",'<br>'));
 	},
 	bindEventsAfterGet : function(){
 		simpleEvents.togglePanelShow(".charOverClickHide","click");
