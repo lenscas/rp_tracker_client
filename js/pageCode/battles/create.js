@@ -37,7 +37,7 @@ codeHandler.registerPageCode({
 					return;
 				}
 				this.characterPanel.find(".panel-body").empty();
-				const characters = xhr.responseJSON.characters;
+				const characters = xhr.responseJSON.data.characters;
 				characters.forEach(value =>
 					this.charList.push({
 						text  : value.name,

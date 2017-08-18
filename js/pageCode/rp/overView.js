@@ -8,7 +8,7 @@ codeHandler.registerPageCode({
 					return;
 				}
 				const idPrefix = "#roleplayOverview";
-				const data     = xhr.responseJSON;
+				const data     = xhr.responseJSON.data;
 				
 				let   table    = $(idPrefix+"Config").empty();
 				let   charCon  = $(idPrefix+"Characters").empty();

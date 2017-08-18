@@ -40,13 +40,11 @@ codeHandler.registerPageCode({
 		api.get({
 			url : "rp/"+this.code+"/config",
 			callBack :(xhr,status)=>{
-				console.log(this);
-				console.log(xhr);
 				if(status!=="success"){
 					return;
 				}
 				
-				const data     = xhr.responseJSON.data || xhr.responseJSON;
+				const data     = xhr.responseJSON.data;
 				this.config    = data;
 				const statCon  = $(this.idPrefix+"Stats").empty();
 				let   statForm = { 

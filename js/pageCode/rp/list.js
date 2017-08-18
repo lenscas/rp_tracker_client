@@ -7,7 +7,7 @@ codeHandler.registerPageCode({
 				if(status!=="success"){
 					return;
 				}
-				const data =xhr.responseJSON
+				const data =xhr.responseJSON.data;
 				let table = {
 					head : {
 						row      : ["User","Description","actions"],
@@ -15,6 +15,7 @@ codeHandler.registerPageCode({
 					},
 					rows : []
 				}
+				console.log(data);
 				data.forEach(
 					(value,key) =>{
 						let profContainer= $('<div></div')

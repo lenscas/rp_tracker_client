@@ -37,7 +37,7 @@ codeHandler.registerPageCode({
 		api.get({
 			url      : "users/"+pageParams[0],
 			callBack : function (xhr,status){
-				const data = xhr.responseJSON;
+				const data = xhr.responseJSON.data;
 				$("#profileUserName").text(data.userData.username);
 				that.drawRPTable("#profileMadeRoleplaysContainer",data.madeRPs);
 				that.drawRPTable("#profileJoinRoleplaysContainer",data.joinedRPs);

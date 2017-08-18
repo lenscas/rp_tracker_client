@@ -25,7 +25,7 @@ codeHandler.registerPageCode({
 				if(status!=="success"){
 					return;
 				}
-				const data = xhr.responseJSON;
+				const data = xhr.responseJSON.data;
 				data.battles.forEach(
 					value=>{
 						const panel = that.getPanel(value)

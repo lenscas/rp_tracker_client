@@ -7,7 +7,7 @@ codeHandler.registerPageCode({
 				if(status !=="success"){
 					return;
 				}
-				const data = xhr.responseJSON;
+				const data = xhr.responseJSON.data;
 				that.inputData.inputs.forEach(
 					input => input.input.type === "select" &&
 						data.forEach(

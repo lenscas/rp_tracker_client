@@ -33,7 +33,7 @@ codeHandler.registerPageCode({
 					return;
 				}
 				
-				const data =xhr.responseJSON;
+				const data =xhr.responseJSON.data;
 				console.log(data);
 				const characterTable = new CharacterFormHelper({
 					characters : data.characters,
@@ -55,7 +55,7 @@ codeHandler.registerPageCode({
 				if(status!=="success"){
 					return;
 				}
-				const data = xhr.responseJSON;
+				const data = xhr.responseJSON.data;
 				abilityTable = new AbilityTableHelper({
 					abilities : data,
 					container : $("#charListAbilityContainer").empty()

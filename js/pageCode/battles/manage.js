@@ -94,7 +94,7 @@ codeHandler.registerPageCode({
 				if(status!=="success"){
 					return;
 				}
-				const data = xhr.responseJSON;
+				const data = xhr.responseJSON.data;
 				this.characters = data.characters;
 				this.modifiers  = data.modifiers;
 				canGoFurther();
@@ -130,7 +130,7 @@ codeHandler.registerPageCode({
 				if(status!=="success"){
 					return;
 				}
-				const data = xhr.responseJSON;
+				const data = xhr.responseJSON.data;
 				abilityTable = new AbilityTableHelper({
 					abilities : data,
 					container : this.abilitiesPanel.find(".panel-body").empty()

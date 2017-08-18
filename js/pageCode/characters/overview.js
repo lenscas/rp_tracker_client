@@ -10,7 +10,7 @@ codeHandler.registerPageCode({
 					return;
 				}
 				//get the relevant data
-				const data      = xhr.responseJSON;
+				const data      = xhr.responseJSON.data;
 				const character = data.character;
 				const canEdit   = data.canEdit; //not used yet
 				this.abilities  = data.abilities;
