@@ -41,7 +41,12 @@ api = {
 		}
 		//if there is a callBack and data.complete is not set, make a function that always calls the callback
 		if(!data.complete && data.callBack){
-			data.complete = (jqXHR,status)=>{data.callBack(jqXHR,status)};
+			data.complete = (jqXHR,status)=>{
+					if(jqXHR.responseJSON.userId){
+						header.setUserId(jqXHR.responseJSON.userId);
+					}
+					data.callBack(jqXHR,status)
+			};
 		}
 		//add the last few missing things for a good ajax call
 		data.dataType  = "json";

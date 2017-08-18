@@ -13,7 +13,9 @@ pageHandler = {
 		//used to keep track at where we are in the url comparison
 		let at = 0;
 		//add the given url to the history if addUrl=true
-		addUrl && history.pushState({url : url},"",url);
+		if(addUrl){
+			history.pushState({},"",url);
+		}
 		//we split the url into an array on the "/" sign to make it easier to compare
 		url = url.replace(conf.base_url,"").split("/");
 		//make the list of all the routes that the given url can refer to
@@ -124,4 +126,6 @@ pageHandler = {
 		codeHandler.initCode(id);
 	},
 }
-window.onpopstate = event => pageHandler.goTo(event.state.url);
+window.onpopstate = event => {
+	pageHandler.goTo(location.href,false);
+}

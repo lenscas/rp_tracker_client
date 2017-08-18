@@ -22,9 +22,10 @@ menuManger = {
 		api.get({
 			url      : "rp/"+newRP,
 			callBack : xhr => {
+				console.log("test");
 				//if the response was indeed in JSON, set the name.
 				xhr.responseJSON &&
-				that.setName(xhr.responseJSON.name)
+				that.setName(xhr.responseJSON.data.name)
 			}
 		})
 	},

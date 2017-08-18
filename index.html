@@ -78,10 +78,23 @@ It also contains the container for each page
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand">Brand</a>
+					<a class="navbar-brand">RP_Tracker</a>
 					<ul class="nav navbar-nav" style="">
 						<li>
-							<a href="#">Profile</a>
+							<a 
+								class="headerLink newPage"
+								id="profileLink"
+								style ="display:none"  
+							>
+								Profile
+							</a>
+							<a 
+								class="newPage"
+								id="loginLink"
+								
+							>
+								Login
+							</a>
 						</li>
 					</ul>
 					<!--
@@ -156,7 +169,8 @@ It also contains the container for each page
 					"api",
 					"htmlGenerator",
 					"menuManager",
-					"basicEventAdder"
+					"basicEventAdder",
+					"header",
 				];
 				let loaded=0;
 				function checkDone(){
