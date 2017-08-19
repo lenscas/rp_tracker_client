@@ -6,10 +6,15 @@ header = {
 			return;
 		}
 		this.userId = userId
-		const href  = conf.base_url+"profile/"+this.userId;
-		$("#profileLink").attr("href",href);
-		$(this.elClass).show();
-		$("#loginLink").hide();
+		if(userId==null){
+			$(this.elClass).hide();
+			$("#loginLink").show();
+		} else {
+			const href  = conf.base_url+"profile/"+this.userId;
+			$("#profileLink").attr("href",href);
+			$(this.elClass).show();
+			$("#loginLink").hide();
+		}
 	}
 }
 $(header.elClass).hide();

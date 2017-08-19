@@ -2,6 +2,7 @@
 pageHandler = {
 	pageHolder    : "#pageHolder",
 	activePage    : "",
+	removeOnNextPage : "",
 	//given an url, this function will grab the correct html and display it
 	//similar to what normally happens when you click on a link
 	//using the addUrl param we can change if we want the url in the browser to be updated as well
@@ -82,6 +83,10 @@ pageHandler = {
 	},
 	//this function actually renders the page
 	enablePage : function (urlData){
+		if(this.removeOnNextPage){
+			$(this.removeOnNextPage).remove();
+			this.removeOnNextPage=null;
+		}
 		//first, remove all the current alerts.
 		//As they become irrelevant on the new page
 		alertManager.removeAllAlerts();
@@ -95,6 +100,7 @@ pageHandler = {
 		this.activePage = route[1]
 		//if the third parameter is set in the route, update the menu
 		if(route.length>=3){
+			console.log(urlData);
 			menuManger.setWatchingRP(urlData.foundParams[route[2]]);
 		}
 		//if the element that stores the page does not exist yet we want to load it in
@@ -102,7 +108,7 @@ pageHandler = {
 		//note that if the page needs to be loaded we do not need to call renderPage
 		//this is because the loaded html is visible the moment it is loaded
 		if(el.length===0){
-			$('<div id="'+ route[1] +'"></div>')
+			$('<div class="pageContent" id="'+ route[1] +'"></div>')
 				.appendTo(this.pageHolder)
 				.load(
 					conf.pages+route[0]+".html",
@@ -128,6 +134,11 @@ pageHandler = {
 		$("#"+id).show()
 		codeHandler.initCode(id);
 	},
+	removePages :function(){
+		$(this.pageHolder).find(":hidden").remove();
+		this.removeOnNextPage = $(this.pageHolder).find(".pageContent");
+		
+	}
 }
 window.onpopstate = event => {
 	pageHandler.goTo(location.href,false);

@@ -48,5 +48,6 @@ codeHandler.registerPageCode({
 	},
 	startUp : function(){
 		menuManger.hideMenu();
+		header.setUserId(null);
 	}
 });

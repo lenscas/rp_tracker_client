@@ -6,6 +6,12 @@ codeHandler = {
 	//if a page is loaded and needs js to run it needs to call this function 
 	//with an object containing the code that needs to run
 	registerPageCode : function(newCode){
+		if(this.pageCode[pageHandler.activePage]){
+			console.log("something got bugged. RESET EVERYTHING!");
+			pageHandler.removePages();
+			codeHandler.pageCode = {};
+			
+		}
 		this.pageCode[pageHandler.activePage] = newCode;
 		const deps = {
 			js   : newCode.dependencies || [],

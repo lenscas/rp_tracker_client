@@ -26,7 +26,7 @@ menuManger = {
 				console.log("test");
 				//if the response was indeed in JSON, set the name.
 				const data = xhr.responseJSON && xhr.responseJSON.data;
-				if(data){
+				if(data.name && data.isJoined){
 					that.setName(data.name,data.isJoined);
 				}
 				
@@ -36,7 +36,7 @@ menuManger = {
 	//this function sets the name and redraws the menu
 	setName  : function(name,hasJoined){
 		this.currentName = name;
-		this.hasJoined   = hasJoined;
+		this.hasJoined   = hasJoined==="1";
 		this.drawMenu();
 	},
 	setHasJoined :function(hasJoined){
