@@ -10,7 +10,9 @@ routes = {
 	"index"          : ["basic/login","basicIndex"],
 	//user routes
 	"login"          : ["users/login","usersLogin"],
+	"logout"         : ["users/logout","usersLogout"],
 	"profile/(:any)" : ["users/profile","usersProfile"],
+	
 	//roleplay routes
 	"rp"             : ["rp/list","rpList"],
 	"create/rp"      : ["rp/create","createRP"],

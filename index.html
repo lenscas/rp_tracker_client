@@ -82,19 +82,36 @@ It also contains the container for each page
 					<ul class="nav navbar-nav" style="">
 						<li>
 							<a 
-								class="headerLink newPage"
+								class="headerLink showLoggedIn newPage"
 								id="profileLink"
-								style ="display:none"  
+								style ="display:none" 
 							>
 								Profile
 							</a>
 							<a 
-								class="newPage"
+								class="newPage headerLink showLoggedOut"
 								id="loginLink"
-								
+								href="login"
 							>
 								Login
 							</a>
+							<li>
+							<a 
+								class="headerLink showLoggedIn newPage"
+								id="profileLink"
+								style ="display:none"
+								href ="logout"
+							>
+								Logout
+							</a>
+							<a 
+								class="newPage headerLink showLoggedOut"
+								id="loginLink"
+								href="register"
+							>
+								Register
+							</a>
+						</li>
 						</li>
 					</ul>
 					<!--
