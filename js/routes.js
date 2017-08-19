@@ -5,24 +5,25 @@
 //this is used to update the menu on the left side
 routes = {
 	//some test routes. Will eventually be deleted
-	"index/test"     : ["basic/index2","basicIndex2"],
+	"index/test"     : ["basic/index2", "basicIndex2"],
 	//index will be the default route
-	"index"          : ["basic/login","basicIndex"],
+	"index"          : ["basic/login" , "basicIndex"],
 	//user routes
-	"login"          : ["users/login","usersLogin"],
-	"logout"         : ["users/logout","usersLogout"],
-	"profile/(:any)" : ["users/profile","usersProfile"],
+	"login"          : ["users/login"    , "usersLogin"]   ,
+	"logout"         : ["users/logout"   , "usersLogout"]  ,
+	"register"       : ["users/register" , "userRegister"] ,
+	"profile/(:any)" : ["users/profile"  , "usersProfile"] ,
 	
 	//roleplay routes
-	"rp"             : ["rp/list","rpList"],
-	"create/rp"      : ["rp/create","createRP"],
-	"rp/(:any)"      : ["rp/overView","rpOverView",0],
+	"rp"             : ["rp/list"     , "rpList"],
+	"create/rp"      : ["rp/create"   , "createRP"],
+	"rp/(:any)"      : ["rp/overView" , "rpOverView",0],
 	//characters
-	"rp/(:any)/characters"        : ["characters/list","charList",0],
-	"rp/(:any)/characters/(:any)" : ["characters/overview","charOverView",0],
-	"create/character/(:any)"     : ["characters/create","createCharacter",0],
+	"rp/(:any)/characters"        : ["characters/list"     , "charList",0],
+	"rp/(:any)/characters/(:any)" : ["characters/overview" , "charOverView",0],
+	"create/character/(:any)"     : ["characters/create"   , "createCharacter",0],
 	//battles
-	"create/battle/(:any)"        : ["battles/create","createBattle",0],
-	"rp/(:any)/battles"           : ["battles/list","battlesList",0],
-	"rp/(:any)/battles/(:any)"    : ["battles/manage","battleMannage",0],
+	"create/battle/(:any)"        : ["battles/create" , "createBattle",0] ,
+	"rp/(:any)/battles"           : ["battles/list"   , "battlesList",0]  ,
+	"rp/(:any)/battles/(:any)"    : ["battles/manage" , "battleMannage",0],
 }

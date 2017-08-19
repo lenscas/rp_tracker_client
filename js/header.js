@@ -6,18 +6,20 @@ header = {
 			return;
 		}
 		this.userId = userId
-		if(userId==null){
-			$(this.elClass).hide();
-			$(".showLoggedIn").hide();
-			$(".showLoggedOut").show();
-		} else {
+		if(userId!=null){
 			const href  = conf.base_url+"profile/"+this.userId;
 			$("#profileLink").attr("href",href);
-			$(this.elClass).show();
+		}
+		this.renderLinks();
+	},
+	renderLinks : function(){
+		if(this.userId){
 			$(".showLoggedIn").show();
 			$(".showLoggedOut").hide();
+		} else {
+			$(".showLoggedIn").hide();
+			$(".showLoggedOut").show();
 		}
 	}
 }
-$(header.elClass).hide();
-$("#loginLink").attr("href",conf.base_url+"login").show();
+header.renderLinks()
