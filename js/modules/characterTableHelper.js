@@ -7,7 +7,8 @@ function CharacterFormHelper(data){
 	this.cellClass  = data.cellClass || "characterStatCell";
 	this.modal      = data.modal;
 	this.rpCode     = data.rpCode;
-	this.baseUrl    = conf.base_url+"rp/"+this.rpCode+"/characters/";
+	this.partUrl    = "rp/"+this.rpCode+"/characters/";
+	this.baseUrl    = conf.base_url+this.baseUrl;
 }
 CharacterFormHelper.prototype.createTableData = function(){
 	let tableData = {
@@ -33,7 +34,7 @@ CharacterFormHelper.prototype.createTableData = function(){
 					htmlGen.createLink(
 						false,
 						{
-							href : this.baseUrl+value.code,
+							href : this.partUrl+value.code,
 							text : value.name,
 						}
 					)
