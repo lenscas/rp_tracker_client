@@ -6,16 +6,17 @@ menuManger = {
 	currentRP     : null,
 	//the name of the current rp.
 	currentName   : null,
+	hasJoined     : false,
 	//used to set what rp the rp specific links link to
 	//the name parameter doesn't need to be given
-	setWatchingRP : function(newRP,name){
+	setWatchingRP : function(newRP,name,hasJoined){
 		if(newRP === this.currentRP){
 			return;
 		}
 		this.currentRP = newRP
 		//if a name is given, set that else get the name
-		if(name){
-			this.setName(name);
+		if(name && hasJoined){
+			this.setName(name,hasJoined);
 			return;
 		}
 		let that = this
@@ -24,14 +25,22 @@ menuManger = {
 			callBack : xhr => {
 				console.log("test");
 				//if the response was indeed in JSON, set the name.
-				xhr.responseJSON &&
-				that.setName(xhr.responseJSON.data.name)
+				const data = xhr.responseJSON && xhr.responseJSON.data;
+				if(data){
+					that.setName(data.name,data.isJoined);
+				}
+				
 			}
 		})
 	},
 	//this function sets the name and redraws the menu
-	setName  : function(name){
+	setName  : function(name,hasJoined){
 		this.currentName = name;
+		this.hasJoined   = hasJoined;
+		this.drawMenu();
+	},
+	setHasJoined :function(hasJoined){
+		this.hasJoined=hasJoined;
 		this.drawMenu();
 	},
 	//this function redraws the menu.
@@ -41,6 +50,21 @@ menuManger = {
 			return;
 		} else {
 			this.menuItems.show();
+			const that = this;
+			this.menuItems.each(function(){
+				const el = $(this);
+				const baseLink = el.data("link");
+				el.attr("href",conf.base_url+"rp/"+that.currentRP+"/"+baseLink);
+				if(el.hasClass("joinLink")){
+					if(that.hasJoined){
+						el.html("Create character");
+					} else {
+						el.html("Join");
+					}
+					el.attr("href",conf.base_url+"create/character/"+that.currentRP);
+				}
+				
+			})
 		}
 		this.menuContainer.find("#menuRPName").html(this.currentName);
 	},
@@ -51,8 +75,11 @@ menuManger = {
 	},
 	showMenu : function(){
 		this.menuContainer.show();
-	}
+	},
+	
 }
+menuManger.drawMenu();
+
 //this binds an event to the links in the menu that way they will always point to the correct rp
 menuManger.menuItems.on("click",function(event){
 	event.preventDefault();
@@ -60,7 +87,29 @@ menuManger.menuItems.on("click",function(event){
 	if( !menuManger.currentRP){
 		return;
 	}
-	const el  = $(this);
-	const url = conf.base_url+"rp/"+menuManger.currentRP+"/"+el.attr("href");
-	pageHandler.goTo(url);
+	const el = $(this);
+	if(el.hasClass("joinLink")){
+		if(!menuManger.hasJoined){
+			api.get({
+				url : "rp/"+menuManger.currentRP+"/join",
+				callBack : function(xhr,status){
+					console.log("test");
+					if(status!=="success"){
+						return;
+					} else {
+						const data = xhr.responseJSON.data;
+						if(data.isJoined=="1"){
+							menumanger.setHasJoined(true);
+							pageHandler.goTo(el.attr("href"));
+						} else {
+							alertManager.show("Something went wrong.");
+						}
+						
+					}
+				}
+			})
+			return;
+		}
+	}
+	pageHandler.goTo(el.attr("href"));
 })
