@@ -23,7 +23,8 @@ routes = {
 	"rp/(:any)/characters/(:any)" : ["characters/overview" , "charOverView",0],
 	"create/character/(:any)"     : ["characters/create"   , "createCharacter",0],
 	//battles
-	"create/battle/(:any)"        : ["battles/create" , "createBattle",0] ,
-	"rp/(:any)/battles"           : ["battles/list"   , "battlesList",0]  ,
+	"create/battle/(:any)"        : ["battles/create" , "createBattle" ,0],
+	"rp/(:any)/battles"           : ["battles/list"   , "battlesList"  ,0],
 	"rp/(:any)/battles/(:any)"    : ["battles/manage" , "battleMannage",0],
+	"rp/(:any)/battles/(:any)/pad": ["battles/pad"    , "battleMannage",0],
 }

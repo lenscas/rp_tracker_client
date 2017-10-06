@@ -100,6 +100,7 @@ BattleDisplay.prototype.addEvents =function(){
 	this.rollButton.on("click",function(event){
 		event.preventDefault();
 		const charStats = that.getCharStats();
+		console.log(charStats);
 		that.on    = charStats.on;
 		const mode = that.actionSelect.val();
 		const data = that.options[mode].roll(charStats.attacker,charStats.defender);

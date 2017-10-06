@@ -26,6 +26,31 @@ codeHandler = {
 		}
 		this.loadDependencies(deps,callBack);
 	},
+	checker : function(list,that,callBack){
+		this.counter=0;
+		this.max = 0
+		this.callBack=callBack
+		Object.keys(list).forEach(
+			value => {
+				this.max = this.max +list[value].length
+			}
+		);
+		this.check = ()=>{
+			if(this.counter===this.max){
+				this.callBack();
+			}
+		}
+		this.check();
+		return (value,kind)=>{
+			this.counter++;
+			if(kind==="js"){
+				that.loadedDeps[value]=true;
+			} else {
+				that.loadedHTMLDeps[value]=true;
+			}
+			this.check();
+		}
+	},
 	loadDependencies : function(deps,callBack){
 		deps = !Array.isArray(deps) ? deps :{js :deps } ;
 		let strippedList = {html :[], js : []};
@@ -35,26 +60,8 @@ codeHandler = {
 			);
 		});
 		const that = this;
-		const check = function(value,kind){
-			if(!kind){
-				this.counter=0;
-				this.max = 0;
-				Object.keys(strippedList).forEach(
-					value => {
-						this.max = this.max +strippedList[value].length
-					}
-				);
-			} else {
-				this.counter++;
-				if(kind==="js"){
-					that.loadedDeps[value]=true;
-				} else {
-					that.loadedHTMLDeps[value]=true;
-				}
-			}
-			this.counter===this.max && callBack();
-		}
-		check();
+		
+		const check = new this.checker(strippedList,this,callBack);
 		//this actually loads all the dependencies.
 		strippedList.js.forEach(
 			value => $.getScript(

@@ -21,7 +21,7 @@ codeHandler.registerPageCode({
 		$(this.idPrefix+"Battles").empty();
 		api.get({
 			url : "rp/"+this.rpCode+"/battles",
-			callBack : function(xhr,status){
+			callBack : (xhr,status)=>{
 				if(status!=="success"){
 					return;
 				}
@@ -62,6 +62,11 @@ codeHandler.registerPageCode({
 		);
 	},
 	getPanelHeading : function(battle){
+		let extraClass="";
+		if(!battle.link){
+			extraClass = "newPage";
+			battle.link = conf.base_url +this.getBaseUrl() + "battles/"+battle.id+"/pad";
+		}
 		return $('<div></div>')
 			.append(
 				htmlGen.createLink(
@@ -77,7 +82,7 @@ codeHandler.registerPageCode({
 					.addClass("pull-right")
 					.append(
 						$('<a></a>')
-							.addClass("btn btn-primary btnFixPullRight")
+							.addClass("btn btn-primary btnFixPullRight "+extraClass)
 							.append("Pad")
 							.attr("href",battle.link)
 					)
