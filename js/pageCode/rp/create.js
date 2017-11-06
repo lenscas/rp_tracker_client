@@ -1,59 +1,114 @@
 codeHandler.registerPageCode({
+	dependencies : ["expandableInputs"],
+	battleSystemSelecClass : "rpCreateSelectSystem",
 	once :function(){
-		let that =this;
+		this.basicFormHolder = htmlGen.createPanel("#createRPForm",{
+			color : "default",
+			title : "Basic",
+		}).find(".panel-body");
+		this.statsFormHolder = htmlGen.createPanel("#createRPForm",{
+			color : "success",
+			title : "Stats",
+		}).find(".panel-body");
+		this.actionsFormHolder = htmlGen.createPanel("#createRPForm",{
+			color : "danger",
+			title : "Actions",
+		}).find(".panel-body");
+		htmlGen.createForm("#createRPForm",{
+			button : {color : "success",text  : "Create"}
+		});
+	},
+	
+	startUp : function(){
+		console.log(this.battleSystemSelecClass);
+		this.basicFormHolder.empty();
 		api.get({
-			url : "statsheet",
-			callBack : function(xhr,status){
-				if(status !=="success"){
+			url : "system",
+			callBack : (xhr,success)=>{
+				if(!success){
 					return;
 				}
-				const data = xhr.responseJSON.data;
-				that.inputData.inputs.forEach(
-					input => input.input.type === "select" &&
-						data.forEach(
-							value => input.input.options.push(
-								{
-									value : value.code,
-									text  : value.name
-								}
-							)
-						)
+				this.systems = xhr.responseJSON && xhr.responseJSON.data;
+				const options = [];
+				this.systems.forEach(
+					(value,key) => options.push({
+						value : value.battleSystem.id,
+						text  : value.battleSystem.name,
+						data  : {name : "key",value : key},
+						
+					})
 				);
-				console.log(that);
-				htmlGen.createForm("#createRPForm",that.inputData);
+				htmlGen.createForm(
+					this.basicFormHolder,
+					{
+						inputs : [
+							{
+								label : "Roleplay name",
+								input : {type : "text",name : "name"}
+							},
+							{
+								label : "Maximum stats",
+								input : {
+									type : "number",
+									name : "startingStatAmount"
+								}
+							},
+							{
+								label : "Maximum abilities",
+								input : {
+									type : "number",
+									name : "startingAbilityAmount"
+								}
+							},
+							{
+								label : "Description",
+								input : {type:"textarea",name:"description"}
+							},
+							{
+								label : "Battle System",
+								input : {
+									type : "select",
+									name : "battleSystem",
+									options : options,
+									cssClass : this.battleSystemSelecClass
+								}
+							}
+						],
+					}
+				);
+				this.bindEventsLate();
+				this.renderStats(0);
 			}
 		})
+		console.log(this.statsFormHolder);
 	},
-	inputData : {
-		inputs : [
-			{
-				label : "Roleplay name",
-				input : {type : "text",name : "name"}
+	renderStats : function(key){
+		this.statsFormHolder.empty();
+		const chosenStats = this.systems[key].stats || [];
+		const tableData = {
+			head : {
+				row      : ["Name","description"],
+				cssClass : "table table-striped"
 			},
-			{
-				label : "Maximum stats",
-				input : {type : "number",name : "startingStatAmount"}
-			},
-			{
-				label : "Maximum abilities",
-				input : {type : "number",name : "startingAbilityAmount"}
-			},
-			{
-			label : "Stat sheet",
-			input : {
-				type    : "select",
-				name    : "statSheetCode",
-				options : []
-			}
-		},
-			{
-				label : "description",
-				input : {type:"textarea",name:"description"}
-			}
-		],
-		button : {color : "success",text  : "Create"}
+			rows : []
+		}
+		chosenStats.forEach(
+			value=>tableData.rows.push([
+				value.name,
+				value.description
+			])
+		);
+		htmlGen.createTable(this.statsFormHolder,tableData);
 	},
-	bindEvents : function(){
+	bindEventsLate : function(){
+		const that = this;
+		$("."+this.battleSystemSelecClass).on("change",function(){
+			const el = $(this);
+			const selectedOption = $(this).find(':selected')
+			const selectedKey = selectedOption.data('key')
+			console.log(selectedKey);
+			that.renderStats(selectedKey);
+		});
 		$("#createRPForm").on("submit",function(event){
 			event.preventDefault();
 			api.post({

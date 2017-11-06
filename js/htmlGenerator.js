@@ -72,15 +72,17 @@ htmlGen = {
 			case "select" :
 				newInput = $('<select></select>')
 				input.options.forEach(value =>{
+					value.data = value.data || {};
 					newInput.append(
 						$('<option></option>')
 							.attr("value",value.value)
 							.html(value.text)
+							.data(value.data.name || "",value.data.value)
 					);
 				});
 				break;
 			case "textarea" :
-				newInput = $('<textarea></textarea>').html(input.placeholder);
+				newInput = $('<textarea></textarea>')
 				if(input.isFancy){
 					console.log("It should be a fancy editor");
 				}

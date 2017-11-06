@@ -9,9 +9,9 @@ codeHandler.registerPageCode({
 				}
 				const idPrefix = "#roleplayOverview";
 				const data     = xhr.responseJSON.data;
-				
 				let   table    = $(idPrefix+"Config").empty();
 				let   charCon  = $(idPrefix+"Characters").empty();
+
 				$(idPrefix+"Desc")
 					.empty()
 					.append(data.description.replace("\n","<br>"));
@@ -20,11 +20,11 @@ codeHandler.registerPageCode({
 					$('<tr></tr>')
 						.append(
 							$('<td></td>')
-								.append("Setting")
+								.append("System")
 						)
 						.append(
 							$('<td></td>')
-								.append(data.statSheetName)
+								.append(data.systemName)
 						)
 				).append(
 					$('<tr></tr>')

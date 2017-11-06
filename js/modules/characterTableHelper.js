@@ -11,63 +11,76 @@ function CharacterFormHelper(data){
 	this.baseUrl    = conf.base_url+this.baseUrl;
 }
 CharacterFormHelper.prototype.createTableData =function(callBack){
-	codeHandler.loadDependencies(["basicFunctions"],()=>{
-		let tableData = {
-		head : {
-			row      : ["Name"],
-			cssClass : "table table-striped"
-		},
-		rows : []
+	codeHandler.loadDependencies(
+		["basicFunctions","battleSystemHelper"],
+		()=>{
+			battleSystems.load(this.config.intName,(battleSystem)=>{
+				this.system = battleSystem;
+				this._createTableData(callBack);
+			});
+			
 		}
-		this.config.statSheet.forEach(
-			value=>tableData.head.row.push(
-				{
-					text : value.name,
-					data : {name:"mod-type-id",value:value.id},
-				}
-			)
-		);
-		this.characters.forEach(value=>{
-			let row = [];
-			tableData.head.row.forEach(headData =>{
-				if(typeof(headData)==="string"){
-					row.push(
-						htmlGen.createLink(
-							false,
-							{
-								href : this.partUrl+value.code,
-								text : value.name,
-							}
-						)
-					);
-				} else {
-					row.push(
+	);
+}
+CharacterFormHelper.prototype._createTableData = function(callBack){
+	let tableData = {
+	head : {
+		row      : ["Name"],
+		cssClass : "table table-striped"
+	},
+	rows : []
+	}
+	this.config.statSheet.forEach(
+		value=>tableData.head.row.push(
+			{
+				text : value.name,
+				data : {name:"mod-type-name",value:value.internalName},
+			}
+		)
+	);
+	
+	this.characters.forEach(value=>{
+		let row = [];
+		tableData.head.row.forEach(headData =>{
+			const mods = funcs.findMods(
+				this.modifiers,
+				value.code,
+				headData.value,
+			);
+			const calculated = this.system.calcStats(mods);
+			if(typeof(headData)==="string"){
+				row.push(
+					htmlGen.createLink(
+						false,
 						{
-							cssClass  : "characterListModifierCell",
-							data      : {
-								name  : "mod-type-id",
-								value : headData.data.value
-							},
-							content   : funcs.findCorrectMods(
-								this.modifiers,
-								value.code,
-								headData.data.value,
-							)
+							href : this.partUrl+value.code,
+							text : value.name,
 						}
-						
-					);
-				}
-			});
-			tableData.rows.push({
-				data : {
-					name  : "character-code",
-					value : value.code
-				},
-				row : row
-			});
+					)
+				);
+			} else {
+				row.push(
+					{
+						cssClass  : "characterListModifierCell",
+						data      : {
+							name  : "mod-type-id",
+							value : headData.data.value
+						},
+						content   : String(calculated[headData.data.value])
+					}
+					
+				);
+			}
 		});
-		callBack(tableData);
+		tableData.rows.push({
+			data : {
+				name  : "character-code",
+				value : value.code
+			},
+			row : row
+		});
 	});
+	callBack(tableData);
 }
 CharacterFormHelper.prototype.createTable = function(bindEvents=true){
 	tableData = this.createTableData(tableData=>{
@@ -93,12 +106,11 @@ CharacterFormHelper.prototype.bindCharacterEvents = function(){
 			const el = $(this);
 			const modId    = el.data("mod-type-id");
 			const charCode = el.closest("tr").data("character-code");
-			const modList  = funcs.findCorrectMods(
+			const modList  = funcs.findMods(
 				that.modifiers,
 				charCode,
-				modId,
-				true
-			);
+				modId
+			).list;
 			const modal    = that.modal
 			if(!modFormHelper){
 				alertManager.show("The page is not fully done loading.");

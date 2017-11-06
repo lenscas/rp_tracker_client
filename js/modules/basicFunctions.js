@@ -1,22 +1,32 @@
 funcs = {
-	findCorrectMods : function(modifiers,charCode,modTypeId,asArray=false){
-		let total=0;
-		if(asArray){
-			total = [];
-		}
-		modifiers.forEach(mod=>{
-			if(mod.code==charCode && mod.statId==modTypeId){
-				if(asArray){
-					total.push(mod);
-				} else {
-					total = total + Number(mod.value)
+	findMods : function(mods,charCode,searchMod=false){
+		let returnData = {};
+		mods.forEach(mod=>{
+			if(mod.code===charCode){
+				const statName = mod.intName
+				if(searchMod && statName!==searchMod){
+					return;
 				}
-				
+				returnData[statName] = returnData[statName] || {
+					base : 0,
+					both : 0,
+					mods : 0,
+					list :[],
+				};
+				const value=Number(mod.value);
+				if(mod.isBase){
+					returnData[statName].base = returnData[statName].base + value;
+				} else {
+					returnData[statName].mods = returnData[statName].mods + value;
+				}
+				returnData[statName].list.push(mod);
+				returnData[statName].both = returnData[statName].both + value;
 			}
 		});
-		if(!asArray){
-			total = total.toString();
+		if(searchMod){
+			returnData =returnData[searchMod];
 		}
-		return total;
+		return returnData;
 	}
+	
 }

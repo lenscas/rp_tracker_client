@@ -14,6 +14,7 @@ modFormHelper.prototype.createTableData = function(){
 		},
 		rows : []
 	}
+	console.log(this.modList);
 	this.modList.forEach(
 		value=>tableData.rows.push({
 			data : {name:"mod-id",value:value.modifiersId},
@@ -44,7 +45,6 @@ modFormHelper.prototype.createTableData = function(){
 			]
 		})
 	);
-	console.log(this.modList);
 	tableData.rows.push({
 		data : {name:"stat-id",value:this.statId},
 		row  : [
@@ -90,7 +90,7 @@ modFormHelper.prototype.getModInputValues =function(row){
 	const data = {
 		name      : row.find(".modName").val(),
 		value     : row.find(".modValue").val(),
-		statId    : row.data("stat-id"),
+		intName   : row.data("stat-id"),
 		countDown : row.find(".modCountDown").val()
 	};
 	if(!Object.keys(data).every(value=>data[value]!=="")){
@@ -107,8 +107,8 @@ modFormHelper.prototype.bindEvents = function(callBack){
 		const el = $(this);
 		const row = el.closest("tr");
 		const modId = row.data("mod-id");
-		console.log(modId);
 		const data = that.getModInputValues(row);
+		console.log(data);
 		if(!data){
 			return;
 		}
@@ -123,6 +123,8 @@ modFormHelper.prototype.bindEvents = function(callBack){
 		const el = $(this);
 		const row = el.closest("tr");
 		const data = that.getModInputValues(row);
+		console.log("lets update?");
+		console.log(data);
 		if(!data){
 			return;
 		}

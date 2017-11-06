@@ -51,6 +51,7 @@ codeHandler.registerPageCode({
 					idPrefix : "createCharacter",
 					inputs : [] 
 				}
+				console.log(data.statSheet);
 				data.statSheet.forEach(
 					value=>statForm.inputs.push({
 						label : value.name,
@@ -67,7 +68,6 @@ codeHandler.registerPageCode({
 				htmlGen.createForm(statCon,statForm);
 				$(this.idPrefix+"StatTotal").html("0 / "+data.max.startingStatAmount);
 				this.createAbilities(data.max.startingAbilityAmount);
-				simpleEvents.togglePanelShow(".createCharacterPanels");
 				this.bindEventsLate();
 			}
 		})

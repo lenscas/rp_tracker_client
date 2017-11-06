@@ -78,6 +78,7 @@ pageHandler = {
 		if(foundRoute){
 			//join the url back up before actually rendering the next function
 			foundRoute.url = foundRoute.url.join("/");
+			console.log(foundRoute.url);
 			this.enablePage(foundRoute);
 		}
 	},

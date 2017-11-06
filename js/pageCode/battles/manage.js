@@ -38,7 +38,7 @@ codeHandler.registerPageCode({
 		let counter   = 0;
 		const canGoFurther = ()=>{
 			counter++;
-			if(counter>=2){
+			if(counter>=3){
 				this.fillCharacterTable();
 				this.fillAbilitiesTable();
 				this.fillManageer();
@@ -63,6 +63,16 @@ codeHandler.registerPageCode({
 					return;
 				}
 				this.config = xhr.responseJSON.data;
+				canGoFurther();
+			}
+		})
+		api.get({
+			url : "rp/"+this.rpCode+"/actions",
+			callBack : (xhr,status)=>{
+				if(status!=="success"){
+					return;
+				}
+				this.actions = xhr.responseJSON.data;
 				canGoFurther();
 			}
 		})
@@ -96,12 +106,14 @@ codeHandler.registerPageCode({
 		})
 	},
 	fillManageer : function(){
+		console.log("does this get executed too many times?");
 		this.battleManager = new BattleManagerHelper({
 			characterContainer : this.selectPanelBody.empty(),
 			config             : this.config,
 			rpCode             : this.rpCode,
 			characters         : this.characters,
 			modifiers          : this.modifiers,
+			actions            : this.actions
 		});
 	}
 })

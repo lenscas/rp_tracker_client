@@ -26,5 +26,5 @@ routes = {
 	"create/battle/(:any)"        : ["battles/create" , "createBattle" ,0],
 	"rp/(:any)/battles"           : ["battles/list"   , "battlesList"  ,0],
 	"rp/(:any)/battles/(:any)"    : ["battles/manage" , "battleMannage",0],
-	"rp/(:any)/battles/(:any)/pad": ["battles/pad"    , "battleMannage",0],
+	"rp/(:any)/battles/(:any)/pad": ["battles/pad"    , "battlePad",0],
 }

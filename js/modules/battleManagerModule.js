@@ -1,20 +1,31 @@
 function BattleManagerHelper(data){
+	
 	this.characterContainer = data.characterContainer;
 	this.resultContainer    = data.resultContainer;
 	this.config             = data.config;
 	this.rpCode             = data.rpCode;
 	this.characters         = data.characters;
 	this.modifiers          = data.modifiers;
+	this.actions            = data.actions;
 	this.attackerPanel      = this.createSmallPanel("Attacker","danger");
 	this.defenderPanel      = this.createSmallPanel("Defender","success");
-	this.fillCharacters();
-	//*
+	
+	
 	codeHandler.loadDependencies(
-		["battleDisplay"],
+		["battleDisplay","battleSystemHelper"],
 		()=>{
-			this.fillResults()
+			battleSystems.load(this.config.intName,(system)=>{
+				console.log("2 objects?");
+				this.system = system;
+				this.fillResults();
+				this.fillCharacters();
+			});
+			
 		}
 	);
+}
+BattleManagerHelper.prototype.remove = function(){
+	this.characterContainer.empty();
 }
 BattleManagerHelper.prototype.createSmallPanel = function(name,color){
 	const container = $('<div class="col-md-6"></div>')
@@ -32,17 +43,25 @@ BattleManagerHelper.prototype.fillCharacters = function(){
 	this.bindEventsLate();
 }
 BattleManagerHelper.prototype.fillResults =function(){
+	console.log("in fill Results");
 	if(!this.resultContainer){
 		this.makeResultsContainer();
 	}
-	this.battleDisplay = new BattleDisplay({
-		container    : this.resultContainer,
-		getCharStats : ()=>this.getChosenStats(),
-		healthStatId : this.findHealthStatId(),
-		rpCode       : this.rpCode,
-		enableSafeButton : this.config.isGM
-	});
-	this.battleDisplay.makeForm();
+	new BattleDisplay(
+		{
+			container    : this.resultContainer,
+			getCharStats : ()=>this.getChosenStats(),
+			rpCode       : this.rpCode,
+			system       : this.config.intName,
+			enableSafeButton : this.config.isGM
+			
+		},
+		(battleDisplay)=>{
+			console.log("why 2 times?");
+			this.battleDisplay = battleDisplay;
+			this.battleDisplay.makeForm();
+		}
+	);
 }
 BattleManagerHelper.prototype.makeInputs = function(selector,name){
 	const selectChar = $('<select></select>')
@@ -56,41 +75,21 @@ BattleManagerHelper.prototype.makeInputs = function(selector,name){
 	const selectStat = $('<select></select>')
 		.addClass("selectStat updateStat form-control")
 		.appendTo(selector);
+	console.log(this.config.statSheet);
 	this.config.statSheet.forEach(value=>selectStat.append(
 		$('<option></option>')
-			.val(value.id)
+			.val(value.internalName)
 			.html(value.name)
 			.data("role",value.role)
 	));
 	$('<input>').appendTo(selector)
 		.addClass("showCurrentAmount form-control");
 }
-BattleManagerHelper.prototype.getCharStats = function(charCode){
-		let returnData = {};
-		const findStatRole = statId => {
-			let role;
-			this.config.statSheet.some(stat =>{
-				if(stat.id===statId){
-					role= stat.role;
-					return true;
-				}
-			});
-			return role;
-		}
-		this.modifiers.forEach(value=>{
-			if(value.code===charCode){
-				const statRole = findStatRole(value.statId);
-				returnData[statRole] = returnData[statRole] || 0;
-				returnData[statRole] = returnData[statRole]+Number(value.value)
-			}
-		});
-		return returnData;
-	},
 BattleManagerHelper.prototype.getChosenStats = function(){
 	const attacker = this.attackerPanel.find(".selectChar").val();
 	const defender = this.defenderPanel.find(".selectChar").val();
 	const getStats = (char,role) =>{
-		let charData = this.getCharStats(char);
+		let charData = funcs.findMods(this.modifiers,char);
 		charData.selected =  Number(
 			this[role+"Panel"].find(".showCurrentAmount").val()
 		)
@@ -102,23 +101,14 @@ BattleManagerHelper.prototype.getChosenStats = function(){
 	returnData.on       = defender;
 	return returnData;
 }
-BattleManagerHelper.prototype.findHealthStatId =function(){
-	this.config.statSheet.some(
-		value=>{
-			if(value.role==="health"){
-				this.healthStatId=value.id;
-				return true;
-			}
-		}
-	)
-	return this.healthStatId;
-}
 BattleManagerHelper.prototype.updateInputs =function(cont){
+	console.log("in update");
 	const charCode = cont.find(".selectChar").val();
 	const statId   = cont.find(".selectStat").val();
 	codeHandler.loadDependencies(["basicFunctions"],()=>{
-		const total = funcs.findCorrectMods(this.modifiers,charCode,statId);
-		cont.find(".showCurrentAmount").val(total);
+		const mods = funcs.findMods(this.modifiers,charCode);
+		const total = this.system.calcStats(mods);
+		cont.find(".showCurrentAmount").val(total[statId]);
 	});
 	
 	

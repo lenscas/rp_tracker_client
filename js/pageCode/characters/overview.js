@@ -105,7 +105,7 @@ codeHandler.registerPageCode({
 		);
 	},
 	fillNotes : function(container,notes){
-		this.notesCont.append(this.character.notes.replace("\n",'<br>'));
+		this.notesCont.append((this.character.notes || "").replace("\n",'<br>'));
 	},
 	createEdit : function(){
 		this.edit = {

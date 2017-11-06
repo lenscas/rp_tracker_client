@@ -56,7 +56,20 @@ codeHandler = {
 		let strippedList = {html :[], js : []};
 		Object.keys(deps).forEach(key => {
 			deps[key].forEach(
-				dep => strippedList[key].push(dep)
+				dep => {
+					
+					if(key==="js"){
+						console.log(dep);
+						if((this.loadedDeps[dep])){
+							return
+						}
+					} else {
+						if(this.loadedHTMLDeps[deps]){
+							return;
+						}
+					}
+					strippedList[key].push(dep)
+				}
 			);
 		});
 		const that = this;
@@ -99,6 +112,7 @@ codeHandler = {
 		this.pageCode[id].unload(params);
 	},
 	rerun : function(){
+		this.unloadCode(pageHandler.activePage,pageHandler.curPageParams);
 		this.initCode(pageHandler.activePage);
 	}
 }

@@ -23,13 +23,11 @@ menuManger = {
 		api.get({
 			url      : "rp/"+newRP,
 			callBack : xhr => {
-				console.log("test");
 				//if the response was indeed in JSON, set the name.
 				const data = xhr.responseJSON && xhr.responseJSON.data;
 				if(data.name && data.isJoined){
 					that.setName(data.name,data.isJoined);
 				}
-				
 			}
 		})
 	},

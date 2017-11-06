@@ -1,7 +1,7 @@
 codeHandler.registerPageCode({
 	dependencies : ["socket","battleManagerModule","basicFunctions"],
 	once : function(){
-		const pad = $("#battlePad");
+		const pad = $("#battlePadContainer");
 		this.managePanel = htmlGen.createPanel(
 			pad,
 			{
@@ -33,13 +33,19 @@ codeHandler.registerPageCode({
 		); 
 	},
 	startUp : function(params){
+		//this.managePanel.remove();
+		//this.writePanel.remove();
+		//this.gridPanel.remove();
+		//this.once();
+		console.log("once again?");
+		console.log(params);
 		this.managePanel.hide();
 		this.rpCode   = params[0];
 		this.battleId = params[1];
 		let count =0;
 		const further = ()=>{
 			count++;
-			if(count==2){
+			if(count==3){
 				if(this.config.isGM==="1"){
 					this.fillManager();
 				}
@@ -52,6 +58,16 @@ codeHandler.registerPageCode({
 					return;
 				}
 				this.config = xhr.responseJSON.data;
+				further();
+			}
+		})
+		api.get({
+			url : "rp/"+this.rpCode+"/actions",
+			callBack : (xhr,status)=>{
+				if(status!=="success"){
+					return;
+				}
+				this.actions = xhr.responseJSON.data;
 				further();
 			}
 		})
@@ -108,7 +124,9 @@ codeHandler.registerPageCode({
 		});
 	},
 	fillManager : function(){
+		console.log("fill the manager?");
 		this.managePanel.show();
+		console.log(this.managePanel);
 		this.battleManager = new BattleManagerHelper({
 			characterContainer : this.managePanel.find(".panel-body").empty(),
 			config             : this.config,
@@ -116,6 +134,7 @@ codeHandler.registerPageCode({
 			characters         : this.characters,
 			modifiers          : this.modifiers,
 		});
+		console.log(this.managePanel);
 	},
 	bindEvents : function(){
 		const that = this;
@@ -143,5 +162,9 @@ codeHandler.registerPageCode({
 			"newMessage/"+this.rpCode+"/"+this.battleId,
 			data =>this.getPadAndFill()
 		);
+	},
+	unload : function(){
+		this.battleManager.remove();
+		this.messageContainer.empty();
 	}
 })
