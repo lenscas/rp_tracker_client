@@ -38,7 +38,7 @@ CharacterFormHelper.prototype._createTableData = function(callBack){
 			}
 		)
 	);
-	
+	console.log(this.characters);
 	this.characters.forEach(value=>{
 		let row = [];
 		tableData.head.row.forEach(headData =>{

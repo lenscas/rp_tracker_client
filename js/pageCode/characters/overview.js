@@ -211,6 +211,15 @@ codeHandler.registerPageCode({
 									type  : "textarea"
 								},
 								label : "Description"
+							},
+							{
+								input : {
+									name  : "abilities["+ability.id+"][code]",
+									value : ability.code || "",
+									type  : "textarea",
+									required : false
+								},
+								label : "Code"
 							}
 						]
 					})

@@ -49,7 +49,7 @@ codeHandler.registerPageCode({
 				const statCon  = $(this.idPrefix+"Stats").empty();
 				let   statForm = { 
 					idPrefix : "createCharacter",
-					inputs : [] 
+					inputs   : [] 
 				}
 				console.log(data.statSheet);
 				data.statSheet.forEach(
@@ -82,6 +82,7 @@ codeHandler.registerPageCode({
 					title : "Ability-"+i,
 				}
 			)
+			console.log("??");
 			htmlGen.createForm(
 				panel.find(".panel-body"),
 				{
@@ -111,6 +112,14 @@ codeHandler.registerPageCode({
 							},
 							label : "Ability description"
 						},
+						{
+							input : {
+								name : "abilities[ability"+i+"][code]",
+								type : "textarea",
+								required : false
+							},
+							label : "ability code"
+						}	
 					]
 			});
 		}

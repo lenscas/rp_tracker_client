@@ -9,13 +9,12 @@ function BattleManagerHelper(data){
 	this.actions            = data.actions;
 	this.attackerPanel      = this.createSmallPanel("Attacker","danger");
 	this.defenderPanel      = this.createSmallPanel("Defender","success");
-	
+	this.battleId           = data.battleId;
 	
 	codeHandler.loadDependencies(
 		["battleDisplay","battleSystemHelper"],
 		()=>{
 			battleSystems.load(this.config.intName,(system)=>{
-				console.log("2 objects?");
 				this.system = system;
 				this.fillResults();
 				this.fillCharacters();
@@ -43,21 +42,20 @@ BattleManagerHelper.prototype.fillCharacters = function(){
 	this.bindEventsLate();
 }
 BattleManagerHelper.prototype.fillResults =function(){
-	console.log("in fill Results");
 	if(!this.resultContainer){
 		this.makeResultsContainer();
 	}
+	console.log(this.config.isGM);
 	new BattleDisplay(
 		{
 			container    : this.resultContainer,
-			getCharStats : ()=>this.getChosenStats(),
+			getCharCodes : ()=>this.getCharCodes(),
 			rpCode       : this.rpCode,
-			system       : this.config.intName,
+			battleId     : this.battleId,
 			enableSafeButton : this.config.isGM
 			
 		},
 		(battleDisplay)=>{
-			console.log("why 2 times?");
 			this.battleDisplay = battleDisplay;
 			this.battleDisplay.makeForm();
 		}
@@ -75,7 +73,6 @@ BattleManagerHelper.prototype.makeInputs = function(selector,name){
 	const selectStat = $('<select></select>')
 		.addClass("selectStat updateStat form-control")
 		.appendTo(selector);
-	console.log(this.config.statSheet);
 	this.config.statSheet.forEach(value=>selectStat.append(
 		$('<option></option>')
 			.val(value.internalName)
@@ -85,24 +82,28 @@ BattleManagerHelper.prototype.makeInputs = function(selector,name){
 	$('<input>').appendTo(selector)
 		.addClass("showCurrentAmount form-control");
 }
-BattleManagerHelper.prototype.getChosenStats = function(){
-	const attacker = this.attackerPanel.find(".selectChar").val();
-	const defender = this.defenderPanel.find(".selectChar").val();
-	const getStats = (char,role) =>{
-		let charData = funcs.findMods(this.modifiers,char);
-		charData.selected =  Number(
-			this[role+"Panel"].find(".showCurrentAmount").val()
-		)
-		return charData;
+BattleManagerHelper.prototype.getCharCodes = function(){
+	const user = this.attackerPanel.find(".selectChar").val();
+	const target = this.defenderPanel.find(".selectChar").val();
+	const getStats = (charCode,role) =>{
+		return {
+			selected : {
+				stat  : this[role+"Panel"].find(".selectStat").val(),
+				value : Number(
+					this[role+"Panel"].find(".showCurrentAmount").val()
+				)
+			},
+			code : charCode
+		}
 	}
-	let returnData = {};
-	returnData.attacker = getStats(attacker,"attacker");
-	returnData.defender = getStats(defender,"defender");
-	returnData.on       = defender;
+	let returnData = {
+		user : getStats(user,"attacker"),
+		target : getStats(target,"defender")
+		
+	};
 	return returnData;
 }
 BattleManagerHelper.prototype.updateInputs =function(cont){
-	console.log("in update");
 	const charCode = cont.find(".selectChar").val();
 	const statId   = cont.find(".selectStat").val();
 	codeHandler.loadDependencies(["basicFunctions"],()=>{

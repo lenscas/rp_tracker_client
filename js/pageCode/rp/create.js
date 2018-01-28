@@ -77,27 +77,42 @@ codeHandler.registerPageCode({
 					}
 				);
 				this.bindEventsLate();
-				this.renderStats(0);
+				this.renderDefaults(0);
 			}
 		})
 		console.log(this.statsFormHolder);
 	},
-	renderStats : function(key){
+	
+	renderDefaults : function(key){
 		this.statsFormHolder.empty();
-		const chosenStats = this.systems[key].stats || [];
-		const tableData = {
+		this.actionsFormHolder.empty();
+		this.renderActions(key);
+		this.renderStats(key);
+	},
+	getTableData : function(data){
+		const tableData =  {
 			head : {
 				row      : ["Name","description"],
 				cssClass : "table table-striped"
 			},
 			rows : []
 		}
-		chosenStats.forEach(
+		data.forEach(
 			value=>tableData.rows.push([
 				value.name,
 				value.description
 			])
 		);
+		return tableData
+	},
+	renderActions : function(key){
+		const chosenActions = this.systems[key].actions || [];
+		const tableData = this.getTableData(chosenActions);
+		htmlGen.createTable(this.actionsFormHolder,tableData);
+	},
+	renderStats : function(key){
+		const chosenStats = this.systems[key].stats || [];
+		const tableData = this.getTableData(chosenStats);
 		htmlGen.createTable(this.statsFormHolder,tableData);
 	},
 	bindEventsLate : function(){
@@ -107,7 +122,7 @@ codeHandler.registerPageCode({
 			const selectedOption = $(this).find(':selected')
 			const selectedKey = selectedOption.data('key')
 			console.log(selectedKey);
-			that.renderStats(selectedKey);
+			that.renderDefaults(selectedKey);
 		});
 		$("#createRPForm").on("submit",function(event){
 			event.preventDefault();

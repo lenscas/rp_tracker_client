@@ -111,6 +111,7 @@ codeHandler.registerPageCode({
 			characterContainer : this.selectPanelBody.empty(),
 			config             : this.config,
 			rpCode             : this.rpCode,
+			battleId           : this.battleId,
 			characters         : this.characters,
 			modifiers          : this.modifiers,
 			actions            : this.actions

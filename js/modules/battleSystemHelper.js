@@ -21,9 +21,6 @@ battleSystems = (typeof battleSystems!=="undefined") ? battleSystems : {
 				conf.base_url+"js/rollDefaultActions/"+name+".js",
 			);
 		}
-		
-		
-
 	},
 	register : function(name,code){
 		this.loaded[name]=code;
