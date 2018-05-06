@@ -14,13 +14,29 @@
 	display:inline;
 }
 #navHeader {
-    position: fixed;
-    top : 0;
-    left: 0;
-    width:100%;
-    height:50px;
-    z-index :10;
+	position: fixed;
+	top : 0;
+	left: 0;
+	width:100%;
+	height:50px;
+	z-index :10;
 }
 #wrapper {
 	margin-top:50px;
 }
+.alertErrors {
+	height:100%;
+	font-size:100%;
+	margin-top:10px;
+	margin-right:10px;
+}
+#alertMenu {
+	max-width : 400px;
+	width : 200px;
+}
+/*to allow more sizes of bootstraps glyph icons */
+.gi-1-5x{font-size: 1.5em;}
+.gi-2x{font-size: 2em;}
+.gi-3x{font-size: 3em;}
+.gi-4x{font-size: 4em;}
+.gi-5x{font-size: 5em;}

@@ -97,13 +97,14 @@ BattleDisplay.prototype.addEvents =function(){
 				const data = xhr.responseJSON;
 				
 				that.newDeltas = data.data.deltas;
-				if(!data.success){
+				let message = ""
+				if(!data.data.success){
 					message = "<pre>"+data.script+"</pre>";
 					that.saveButton.prop("disabled",true);
-					that.resultDisplay.empty()
+					that.resultDisplay.empty().html(message);
 					return
 				}
-				let message = ""
+				
 				data.data.deltas.forEach((value)=>{
 					switch(value.what){
 						case data.data.kinds.OUTPUT:

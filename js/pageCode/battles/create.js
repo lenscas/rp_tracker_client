@@ -33,7 +33,7 @@ codeHandler.registerPageCode({
 		api.get({
 			url : "rp/"+this.code+"/characters",
 			callBack : (xhr,status)=>{
-				if(status!=="success"){
+				if(status !== "success"){
 					return;
 				}
 				this.characterPanel.find(".panel-body").empty();

@@ -78,7 +78,6 @@ pageHandler = {
 		if(foundRoute){
 			//join the url back up before actually rendering the next function
 			foundRoute.url = foundRoute.url.join("/");
-			console.log(foundRoute.url);
 			this.enablePage(foundRoute);
 		}
 	},
@@ -100,8 +99,11 @@ pageHandler = {
 		codeHandler.curPageParams = urlData.foundParams;
 		this.activePage = route[1]
 		//if the third parameter is set in the route, update the menu
+		console.log(route);
 		if(route.length>=3){
+			console.log("in if?");
 			console.log(urlData);
+			console.log(urlData.foundParams[route[2]]);
 			menuManger.setWatchingRP(urlData.foundParams[route[2]]);
 		}
 		//if the element that stores the page does not exist yet we want to load it in

@@ -1,21 +1,35 @@
-socket = {
+socket = (function(){
+	
 	//this is used to handle responses
-	callList : {},
-	permEvents : {},
+	const callList = {};
+	const permEvents = {};
 	//a queue that holds messages until we have a connection
-	queue : [],
-	//is used to see if calls need to go to the gueue or can be send
-	isConnected : false,
+	const queue = [];
+	const failQueu = [];
+	const openQueu = [];
+	//is used to see if calls need to go to the queue or can be send
+	let isConnected = false;
+	let connGotClosed = false;
+	let socket = null;
 	//this is used to send a message.
 	//it places messages into a queue until we have a connection
-	send : function(data){
-		if(this.isConnected){
-			this._send(data);
-		} else {
-			this.queue.push(data);
+	//this is what actually sends a message. DO NOT USE DIRECTLY!
+	const _send = (data)=>{
+		console.log("??");
+		let sendData = {
+			data  : data.data,
+			route : data.route
 		}
-	},
-	createReturnCode : function() {
+		if(data.callBack){
+			sendData.replyId = createReturnCode();
+			callList[sendData.replyId] = data.callBack;
+			delete data.callBack;
+		}
+		sendData = JSON.stringify(sendData);
+		console.log(sendData);
+		socket.send(sendData);
+	};
+	const createReturnCode = ()=>{
 		let id = "";
 		let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		let duplicate = false;
@@ -23,86 +37,113 @@ socket = {
 			for (let i = 0; i < 5; i++){
 				id += possible.charAt(Math.floor(Math.random() * possible.length));
 			}
-			duplicate = this.callList[id];
+			duplicate = callList[id];
 		}while(duplicate)
 		return id;
-	},
-	//this is what actually sends a message. DO NOT USE DIRECTLY!
-	_send : function(data){
-		let sendData = {
-			data  : data.data,
-			route : data.route
-		}
-		if(data.callBack){
-			sendData.replyId = this.createReturnCode();
-			this.callList[sendData.replyId] = data.callBack;
-			delete data.callBack;
-		}
-		sendData = JSON.stringify(sendData);
-		this.socket.send(sendData);
-	},
-	registerEvent : function(url,callBack){
-		if(!this.permEvents[url]){
-			this.permEvents[url] = callBack
-			return true;
-		} else {
-			return false;
-		}
-	},
-	removeEvent : function(url){
-		delete this.permEvents[url];
-	},
+	};
 	//used to connect to a websocket.
 	//Also goes through the queue to send everything when we got a connection
 	//it also adds an event that listens to incoming messages
-	connect : function(config) {
-		this.socket = new WebSocket(config.url+":"+config.port);
-		this.socket.addEventListener(
+	const connect = config => {
+		isConnected = false;
+		connGotClosed = false;
+		socket = null;
+		socket = new WebSocket(config.url+":"+config.port);
+		socket.addEventListener(
 			"open",
 			event=>{
-				this._send({
+				console.log(socket);
+				_send({
 					route    : ["users","register"],
 					data     : {registerCode : config.registerCode},
 					callBack : (data)=>{
 						console.log("in callback");
 						console.log(data);
-						this.isConnected = true;
-						this.queue.forEach((value)=>this._send(value));
-						this.queue = null;
+						isConnected = true;
+						openQueu.forEach((value)=>value());
+						queue.forEach((value)=>this._send(value));
+						//this empties the queue
+						queue.length = 0;
 					}
 				})
 			}
 		);
-		this.socket.addEventListener('message', (event)=>{
+		socket.addEventListener(
+			"error",
+			event => {
+				connGotClosed = true;
+				failQueu.forEach(fun=>fun());
+			}
+		);
+		socket.addEventListener(
+			"close",
+			event => {
+				connGotClosed = true;
+				failQueu.forEach(fun=>fun());
+			}
+		);
+		socket.addEventListener('message', (event)=>{
 			const data = JSON.parse(event.data);
-			if(data.replyId && this.callList[data.replyId]){
-				console.log("do callback");
-				console.log(this.callList);
-				this.callList[data.replyId](data);
-				delete this.callList[data.replyId];
-				console.log(this.callList);
+			if(data.replyId && callList[data.replyId]){
+				callList[data.replyId](data);
+				delete callList[data.replyId];
 			} else if(data.route) {
-				console.log(data);
-				if(this.permEvents[data.route]){
-					this.permEvents[data.route](data);
+				if(permEvents[data.route]){
+					permEvents[data.route](data);
 				} else {
-					console.log(
+					console.error(
 						"Got event call but no event handler yet for " + data.route
 					);
 				}
 			} else {
-				console.log("something went wrong!");
+				console.error("something went wrong!");
 				console.log(data);
 			}
 		});
-	}
-}
-api.get({
-	url : "socket/config",
-	callBack : function(xhr,status){
-		if(status!=="success"){
-			return;
+	};
+	return {
+		getConnected : function(){
+			api.get({
+				url : "socket/config",
+				callBack : function(xhr,status){
+					if(status!=="success"){
+						return;
+					}
+					connect(xhr.responseJSON.data);
+				}
+			});
+		},
+		send : function(data){
+			if(isConnected){
+				_send(data);
+			} else {
+				queue.push(data);
+			}
+		},
+		registerEvent : function(url,callBack){
+			if(!permEvents[url]){
+				permEvents[url] = callBack
+				return true;
+			} else {
+				return false;
+			}
+		},
+		removeEvent : function(url){
+			delete permEvents[url];
+		},
+		registerOnFail(callBack){
+			if(connGotClosed){
+				callBack();
+			}
+			failQueu.push(callBack);
+		},
+		registerOnOpen(callBack){
+			console.log(callBack);
+			if(socket){
+				callBack();
+			}
+			openQueu.push(callBack);
 		}
-		socket.connect(xhr.responseJSON.data);
 	}
-})
+})()
+socket.getConnected()

@@ -19,15 +19,12 @@ menuManger = {
 			this.setName(name,hasJoined);
 			return;
 		}
-		let that = this
 		api.get({
 			url      : "rp/"+newRP,
 			callBack : xhr => {
 				//if the response was indeed in JSON, set the name.
-				const data = xhr.responseJSON && xhr.responseJSON.data;
-				if(data.name && data.isJoined){
-					that.setName(data.name,data.isJoined);
-				}
+				const data = xhr.responseJSON.data;
+				this.setName(data.name,data.isJoined);
 			}
 		})
 	},
@@ -90,14 +87,14 @@ menuManger.menuItems.on("click",function(event){
 		if(!menuManger.hasJoined){
 			api.get({
 				url : "rp/"+menuManger.currentRP+"/join",
-				callBack : function(xhr,status){
+				callBack : (xhr,status)=>{
 					console.log("test");
 					if(status!=="success"){
 						return;
 					} else {
 						const data = xhr.responseJSON.data;
 						if(data.isJoined=="1"){
-							menumanger.setHasJoined(true);
+							menuManger.setHasJoined(true);
 							pageHandler.goTo(el.attr("href"));
 						} else {
 							alertManager.show("Something went wrong.");

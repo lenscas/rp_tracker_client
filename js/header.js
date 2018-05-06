@@ -16,6 +16,12 @@ header = {
 		if(this.userId){
 			$(".showLoggedIn").show();
 			$(".showLoggedOut").hide();
+			if(typeof alerts==='undefined'){
+				codeHandler.loadDependencies(["alerts"],
+					()=>alerts.init(()=>{})
+				);
+			}
+			
 		} else {
 			$(".showLoggedIn").hide();
 			$(".showLoggedOut").show();
