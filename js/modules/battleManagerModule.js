@@ -46,7 +46,7 @@ BattleManagerHelper.prototype.fillResults =function(){
 		this.makeResultsContainer();
 	}
 	console.log(this.config.isGM);
-	new BattleDisplay(
+	this.display = new BattleDisplay(
 		{
 			container    : this.resultContainer,
 			getCharCodes : ()=>this.getCharCodes(),

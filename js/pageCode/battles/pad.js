@@ -135,6 +135,7 @@ codeHandler.registerPageCode({
 			characters         : this.characters,
 			modifiers          : this.modifiers,
 		});
+		console.log("battleManager",this.battleManager)
 		console.log(this.managePanel);
 	},
 	bindEvents : function(){
@@ -165,7 +166,11 @@ codeHandler.registerPageCode({
 		);
 	},
 	unload : function(){
-		this.battleManager.remove();
+		console.log("test")
+		console.log("this",this)
+		if(this.battleManager) {
+			this.battleManager.remove();
+		}
 		this.messageContainer.empty();
 	}
 })

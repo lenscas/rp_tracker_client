@@ -57,8 +57,9 @@ menuManger = {
 						el.html("Join");
 					}
 					el.attr("href",conf.base_url+"create/character/"+that.currentRP);
+				}else if(el.hasClass("createBattle")){
+					el.attr("href",conf.base_url+"create/character/"+that.currentRP);
 				}
-				
 			})
 		}
 		this.menuContainer.find("#menuRPName").html(this.currentName);

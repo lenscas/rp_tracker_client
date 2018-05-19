@@ -51,7 +51,7 @@ socket = (function(){
 		socket = new WebSocket(config.url+":"+config.port);
 		socket.addEventListener(
 			"open",
-			event=>{
+			event => {
 				console.log(socket);
 				_send({
 					route    : ["users","register"],
@@ -61,7 +61,7 @@ socket = (function(){
 						console.log(data);
 						isConnected = true;
 						openQueu.forEach((value)=>value());
-						queue.forEach((value)=>this._send(value));
+						queue.forEach((value)=>_send(value));
 						//this empties the queue
 						queue.length = 0;
 					}

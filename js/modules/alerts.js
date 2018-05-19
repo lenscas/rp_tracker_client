@@ -62,6 +62,11 @@ alerts = (function(){
 				url    : ["rp","RP_CODE","characters","CHARCODE"],
 				newVar : "CHARACTER_NAME",
 				key    : ["character","name"]
+			},
+			"BATTLE_ID" : {
+				url     : ["rp","RP_CODE","battles","BATTLE_ID"],
+				newVar  : "BATTLE_NAME",
+				key     : ["battle","name"]
 			}
 
 		}
@@ -122,7 +127,8 @@ alerts = (function(){
 				const messageExtensions = {
 					USERNAME         : "profile/{USERID}",
 					RP_NAME        : "rp/{RP_CODE}",
-					CHARACTER_NAME : "rp/{RP_CODE}/characters/{CHARCODE}"
+					CHARACTER_NAME : "rp/{RP_CODE}/characters/{CHARCODE}",
+					BATTLE_NAME    : "rp/{RP_CODE}/battles/{BATTLE_ID}/pad"
 				}
 				Object.keys(messageExtensions).forEach(value=>{
 					const link = '<a href="'+conf.base_url+messageExtensions[value]+'" class="newPage">{'+value+'}</a>';

@@ -4,6 +4,9 @@ codeHandler.registerPageCode({
 	depsHTML     : ["modal"],
 	once :function(){
 		const addPanelsTo = this.idPrefix + "Body";
+		this.nextTurnBTN  = $('<p>Next turn</p>')
+			.addClass("btn btn-success ")
+			.addClass("battleManageNextTurn btnFixPullRight")
 		this.selectPanel = htmlGen.createPanel(
 			addPanelsTo,
 			{
@@ -12,11 +15,7 @@ codeHandler.registerPageCode({
 					.append(
 						$('<span></span>')
 							.addClass("pull-right")
-							.append(
-								$('<p>Next turn</p>')
-									.addClass("btn btn-success ")
-									.addClass("battleManageNextTurn btnFixPullRight")
-							)
+							.append(this.nextTurnBTN)
 					),
 				color : "primary",
 			}
@@ -42,6 +41,7 @@ codeHandler.registerPageCode({
 				this.fillCharacterTable();
 				this.fillAbilitiesTable();
 				this.fillManageer();
+				this.addEvents();
 			}
 		}
 		api.get({
@@ -116,5 +116,25 @@ codeHandler.registerPageCode({
 			modifiers          : this.modifiers,
 			actions            : this.actions
 		});
+	},
+	unload : function(){
+		this.nextTurnBTN.off("click")
+	},
+	addEvents : function() {
+		const that = this;
+		this.nextTurnBTN.on("click", function(e){
+			e.preventDefault();
+			api.post({
+				url : "rp/" + that.rpCode + "/battles/"+that.battleId +"/nextTurn",
+				callBack : function(xhr,status){
+					console.log(status,xhr)
+					if(status!="success"){
+						return;
+					}
+					that.nextTurnBTN.off("click")
+					codeHandler.rerun()
+				}
+			})
+		})
 	}
 })
