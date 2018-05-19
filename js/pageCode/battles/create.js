@@ -88,9 +88,13 @@ codeHandler.registerPageCode({
 				callBack :function(xhr,status){
 					let json = xhr.responseJSON;
 					if(status=="success" && !json.error){
-						let location =xhr.getResponseHeader("location")
-						location = location.replace(conf.api,"");
-						pageHandler.goTo(conf.base_url+location);
+						pageHandler.goTo(
+							conf.base_url+
+							"rp/"+
+							that.code+
+							"/battles/"+
+							json.id
+						);
 					}
 				}
 			});

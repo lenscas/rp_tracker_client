@@ -58,7 +58,7 @@ menuManger = {
 					}
 					el.attr("href",conf.base_url+"create/character/"+that.currentRP);
 				}else if(el.hasClass("createBattle")){
-					el.attr("href",conf.base_url+"create/character/"+that.currentRP);
+					el.attr("href",conf.base_url+"create/battle/"+that.currentRP);
 				}
 			})
 		}
