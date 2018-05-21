@@ -4,6 +4,8 @@ battleSystems = (typeof battleSystems!=="undefined") ? battleSystems : {
 	callBacks : {},
 	counter : 0,
 	load : function(name,callback){
+		callback();
+		/*
 		if(name==="CUST"){
 			callBack();
 			return;
@@ -17,10 +19,11 @@ battleSystems = (typeof battleSystems!=="undefined") ? battleSystems : {
 		this.callBacks[name].push(callback);
 		if(!this.loading[name]){
 			this.loading[name]   = true;
-			$.getScript(
-				conf.base_url+"js/rollDefaultActions/"+name+".js",
-			);
+			//$.getScript(
+			//	conf.base_url+"js/rollDefaultActions/"+name+".js",
+			//);
 		}
+		*/
 	},
 	register : function(name,code){
 		this.loaded[name]=code;

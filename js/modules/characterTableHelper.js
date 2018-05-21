@@ -47,7 +47,7 @@ CharacterFormHelper.prototype._createTableData = function(callBack){
 				value.code,
 				headData.value,
 			);
-			const calculated = this.system.calcStats(mods);
+			//const calculated = this.system.calcStats(mods);
 			if(typeof(headData)==="string"){
 				row.push(
 					htmlGen.createLink(
@@ -66,7 +66,7 @@ CharacterFormHelper.prototype._createTableData = function(callBack){
 							name  : "mod-type-id",
 							value : headData.data.value
 						},
-						content   : String(calculated[headData.data.value])
+						content   : String(mods[headData.data.value].both)
 					}
 					
 				);

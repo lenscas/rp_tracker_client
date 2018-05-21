@@ -108,8 +108,7 @@ BattleManagerHelper.prototype.updateInputs =function(cont){
 	const statId   = cont.find(".selectStat").val();
 	codeHandler.loadDependencies(["basicFunctions"],()=>{
 		const mods = funcs.findMods(this.modifiers,charCode);
-		const total = this.system.calcStats(mods);
-		cont.find(".showCurrentAmount").val(total[statId]);
+		cont.find(".showCurrentAmount").val(mods[statId].both);
 	});
 	
 	
